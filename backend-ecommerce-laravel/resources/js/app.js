@@ -1,0 +1,77 @@
+import './bootstrap';
+
+import Alpine from 'alpinejs';
+import collapse from '@alpinejs/collapse'
+import {get, post} from "./http.js";
+import Swal from 'sweetalert2'
+
+
+Alpine.plugin(collapse)
+
+window.Alpine = Alpine;
+
+document.addEventListener("alpine:init", async () => {
+
+    // Mostrar SweetAlert si hay mensaje de estado (mismo efecto que en tu Blade)
+    const statusElement = document.getElementById('status-message');
+    if (statusElement) {
+      Swal.fire({
+        icon: 'success',
+        title: '¡Link sent!',
+        text: statusElement.getAttribute('data-status'),
+        confirmButtonText: 'Got it',
+        timer: 9000
+      });
+    }
+
+
+  Alpine.data("productItem", (product) => {
+    return {
+      product,
+      addToCart(quantity = 1) {
+        post(this.product.addToCartUrl, {quantity})
+          .then(result => {
+            this.$dispatch('cart-change', {count: result.count})
+            this.$dispatch("notify", {
+              message: "The item was added into the cart",
+            });
+          })
+          .catch(response => {
+            console.log(response);
+            this.$dispatch('notify', {
+              message: response.message || 'Server Error. Please try again.',
+              type: 'error'
+            })
+          })
+      },
+      removeItemFromCart() {
+        post(this.product.removeUrl)
+          .then(result => {
+            this.$dispatch("notify", {
+              message: "The item was removed from cart",
+            });
+            this.$dispatch('cart-change', {count: result.count})
+            this.cartItems = this.cartItems.filter(p => p.id !== product.id)
+          })
+      },
+      changeQuantity() {
+        post(this.product.updateQuantityUrl, {quantity: product.quantity})
+          .then(result => {
+            this.$dispatch('cart-change', {count: result.count})
+            this.$dispatch("notify", {
+              message: "The item quantity was updated",
+            });
+          })
+          .catch(response => {
+            this.$dispatch('notify', {
+              message: response.message || 'Server Error. Please try again.',
+              type: 'error'
+            })
+          })
+      },
+    };
+  });
+});
+
+
+Alpine.start();
