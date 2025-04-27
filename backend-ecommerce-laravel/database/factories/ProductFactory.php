@@ -20,8 +20,9 @@ class ProductFactory extends Factory
     public function definition(): array
     {
 
+        $title = fake()->text(100);
         return [
-            'title' => fake()->text(),
+            'title' => fake()->text(100),
             'slug' => Str::slug($title),
             'description' => fake()->realText(1000),
             'price' => fake()->randomFloat(2, 20, 500),

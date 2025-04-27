@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminAuthController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -32,7 +32,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 Route::post('/forgot-password', [PasswordResetLinkController::class, 'apiStore']);
 
 Route::post('/login', [AdminAuthController::class, 'login']);
-
 
 
 

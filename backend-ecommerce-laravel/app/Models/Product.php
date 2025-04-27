@@ -15,14 +15,24 @@ class Product extends Model
     use SoftDeletes;
 
     protected $fillable = ['title', 'description', 'price', 'quantity', 'published', 'created_by', 'updated_by'];
-
+    
+    /**
+     * The `slug` field is used for SEO-friendly URLs.
+     * It is generated from the `title` field.
+     * The `slug` field is unique for each product.
+     */
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('title')
             ->saveSlugsTo('slug');
     }
-
+    
+      /**
+     * Defines `slug` as the route key for frontend URLs.
+     * Example: /products/product-slug (SEO-friendly and human-readable).
+     * @return string
+     */
     public function getRouterKeyName()
     {
         return 'slug';

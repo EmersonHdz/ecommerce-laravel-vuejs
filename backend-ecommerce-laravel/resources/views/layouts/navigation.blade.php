@@ -6,7 +6,7 @@
 >   
     <!-- Logo -->
     <div class="m-5">
-        <a href="{{ route('login') }}" class="block py-navbar-item">EmersonEcommerce LTD </a>
+        <a href="{{ route('home') }}" class="block py-navbar-item">EmersonEcommerce LTD </a>
     </div>
     <!-- Responsive Menu -->
     <div
