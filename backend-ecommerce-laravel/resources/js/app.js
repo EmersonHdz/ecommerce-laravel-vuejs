@@ -1,7 +1,7 @@
 import './bootstrap';
 
 import Alpine from 'alpinejs';
-import collapse from '@alpinejs/collapse'
+import collapse from '@alpinejs/collapse';
 import {get, post} from "./http.js";
 import Swal from 'sweetalert2'
 
@@ -11,6 +11,48 @@ Alpine.plugin(collapse)
 window.Alpine = Alpine;
 
 document.addEventListener("alpine:init", async () => {
+
+
+  Alpine.data("toast", () => ({
+    visible: false,
+    delay: 5000,
+    percent: 0,
+    interval: null,
+    timeout: null,
+    message: null,
+    close() {
+      this.visible = false;
+      clearInterval(this.interval);
+    },
+    show(message) {
+      this.visible = true;
+      this.message = message;
+
+      if (this.interval) {
+        clearInterval(this.interval);
+        this.interval = null;
+      }
+      if (this.timeout) {
+        clearTimeout(this.timeout);
+        this.timeout = null;
+      }
+
+      this.timeout = setTimeout(() => {
+        this.visible = false;
+        this.timeout = null;
+      }, this.delay);
+      const startDate = Date.now();
+      const futureDate = Date.now() + this.delay;
+      this.interval = setInterval(() => {
+        const date = Date.now();
+        this.percent = ((date - startDate) * 100) / (futureDate - startDate);
+        if (this.percent >= 100) {
+          clearInterval(this.interval);
+          this.interval = null;
+        }
+      }, 30);
+    },
+  }));
 
     // Mostrar SweetAlert si hay mensaje de estado (mismo efecto que en tu Blade)
     const statusElement = document.getElementById('status-message');
@@ -37,7 +79,6 @@ document.addEventListener("alpine:init", async () => {
             });
           })
           .catch(response => {
-            console.log(response);
             this.$dispatch('notify', {
               message: response.message || 'Server Error. Please try again.',
               type: 'error'
