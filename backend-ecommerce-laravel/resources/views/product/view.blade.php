@@ -1,4 +1,5 @@
 <x-app-layout>
+    <!-- view.blade.php -->
     <div  x-data="productItem({{ json_encode([
         'id' => $product->id,
         'slug' => $product->slug,

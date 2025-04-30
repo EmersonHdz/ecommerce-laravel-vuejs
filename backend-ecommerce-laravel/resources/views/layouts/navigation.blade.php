@@ -2,8 +2,11 @@
     class="flex justify-between bg-slate-800 shadow-md text-white"
     x-data="{
         mobileMenuOpen: false,
-    }"
->   
+        <!-- Cart Items Count -->
+           cartItemsCount: {{ \App\Helpers\Cart::getCartItemsCount() }},}"
+           @cart-change.window="cartItemsCount = $event.detail.count"
+             class="flex justify-between bg-slate-800 shadow-md text-white"
+           >   
     <!-- Logo -->
     <div class="m-5">
         <a href="{{ route('home') }}" class="block py-navbar-item">EmersonEcommerce LTD </a>

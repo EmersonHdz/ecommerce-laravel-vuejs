@@ -1,7 +1,7 @@
 <x-app-layout>
 
     
-    
+    <!--index.blade.php-->
     <?php
     /** @var \Illuminate\Database\Eloquent\Collection $products */
     ?>
