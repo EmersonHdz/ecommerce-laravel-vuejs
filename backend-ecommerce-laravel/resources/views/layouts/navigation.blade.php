@@ -20,7 +20,7 @@
         <ul class="mt-10">
             <li>
                 <a
-                    href="#"
+                    href="{{ route('cart.index')}}"
                     class="relative flex items-center justify-between py-2 px-3 transition-colors hover:bg-slate-800"
                 >
                     <div class="flex items-center">
@@ -202,7 +202,7 @@
     <nav class="hidden md:block m-5">
         <ul class="grid grid-flow-col items-center">
             <li>
-                <a href="#"
+                <a href="{{ route('cart.index')}}"
                 class="relative mr-4 inline-flex items-center gap-2 rounded-xl bg-slate-800 text-white px-4 py-2 hover:bg-slate-700 transition-colors duration-300 shadow-md">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
