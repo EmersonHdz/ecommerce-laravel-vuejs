@@ -8,7 +8,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 text-cyan-100 hover:text-cyan-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
-               <span class="text-cyan-100 hover:text-cyan-300"> Continue Shopping</span>
+               <span class="text-cyan-100 hover:text-cyan-300">Continue Shopping</span>
             </a>
         </div>
 
@@ -37,6 +37,7 @@
 
             <!-- If items exist -->
             <template x-if="cartItems.length">
+                
                 <div class="space-y-6">
                     <template x-for="product in cartItems" :key="product.id">
                         <div x-data="productItem(product)" class="flex flex-col sm:flex-row items-center gap-4 border-b pb-4">
@@ -106,7 +107,7 @@
             <!-- Empty Cart -->
             <template x-if="!cartItems.length">
                 <div class="text-center text-gray-500 py-10">
-                    <p class="text-xl">🛍️ Your cart is empty</p>
+                    <p class="text-xl"> Your cart is empty</p>
                     <a href="{{ route('home') }}" class="mt-4 inline-block text-purple-600 hover:underline text-sm">
                         Go back to shop
                     </a>
