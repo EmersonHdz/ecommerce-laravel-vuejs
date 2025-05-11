@@ -53,7 +53,7 @@
             <template x-for="image in images" :key="image">
               <div @click="activeImage = image" 
                 class="w-20 h-20 border-2 rounded-md flex items-center justify-center cursor-pointer"
-                :class="activeImage === image ? 'border-purple-500' : 'border-gray-300'"
+                :class="activeImage === image ? 'border-emerald-300' : 'border-gray-300'"
               >
                 <img :src="image" alt="Thumbnail" class="object-contain max-w-full max-h-full rounded" />
               </div>
@@ -64,18 +64,18 @@
         <!-- Product Info -->
         <div class="lg:col-span-2 space-y-6">
           <h1 class="text-2xl font-bold text-gray-100">{{ $product->title }}</h1>
-          <div class="text-3xl font-extrabold text-purple-600">${{ $product->price }}</div>
+          <div class="text-3xl font-extrabold text-gray-200">${{ $product->price }}</div>
   
           <!-- Quantity -->
           <div class="flex items-center gap-4">
             <label for="quantity" class="font-semibold text-gray-100">Quantity:</label>
             <input type="number" x-ref="quantityEl" value="1" min="1"
-              class="w-24 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400" />
+              class="w-24 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-300" />
           </div>
   
           <!-- Add to Cart Button -->
           <button @click="addToCart($refs.quantityEl.value)"
-            class="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg flex items-center justify-center gap-2">
+            class="w-full py-3 px-4 text-white bg-emerald-600 font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-emerald-700 active:bg-emerald-800 transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -107,7 +107,7 @@
     <div class="text-right">
       <button
         @click="expanded = !expanded"
-        class="text-purple-600 hover:underline mt-2"
+        class="text-emerald-400 hover:underline mt-2"
         x-text="expanded ? 'Read Less' : 'Read More'"
       ></button>
     </div>

@@ -5,10 +5,10 @@
         <div class="flex items-center justify-between mb-8">
             <h1 class="text-3xl font-bold text-cyan-100">Shopping Cart</h1>
             <a href="{{ route('home') }}" class="flex items-center rounded">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 text-cyan-100 hover:text-cyan-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 text-emerald-100 hover:text-emerald-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
-               <span class="text-cyan-100 hover:text-cyan-300">Continue Shopping</span>
+               <span class="text-emerald-100 hover:text-emerald-300">Continue Shopping</span>
             </a>
         </div>
 
@@ -50,7 +50,7 @@
                             <div class="flex-1 w-full space-y-2">
                                 <div class="flex justify-between items-start">
                                     <h3 class="text-lg font-medium text-gray-800" x-text="product.title"></h3>
-                                    <span class="text-purple-700 font-semibold text-base sm:text-lg">
+                                    <span class="text-emerald-950 font-semibold text-base sm:text-lg">
                                         £<span x-text="product.price"></span>
                                     </span>
                                 </div>
@@ -58,13 +58,13 @@
                                 <div class="flex flex-wrap items-center justify-between gap-3 w-full">
                                     <!-- Quantity input -->
                                     <div class="flex items-center gap-2">
-                                        <span class="text-sm text-gray-500">Quantity:</span>
+                                        <span class="text-sm text-emerald-950">Quantity:</span>
                                         <input 
                                             type="number" 
                                             min="1" 
                                             x-model.number="product.quantity"
                                             @change="changeQuantity(product)"
-                                            class="w-20 px-2 py-1 rounded border border-gray-300 focus:outline-none focus:ring focus:ring-purple-400"
+                                            class="w-20 px-2 py-1 rounded border border-gray-300 focus:outline-none focus:ring focus:ring-emerald-400"
                                         />
                                     </div>
                                 
@@ -96,7 +96,7 @@
 
                         <form action="#" method="POST">
                             @csrf
-                            <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 rounded-lg text-lg transition">
+                            <button type="submit" class="w-full hover:bg-emerald-700 bg-emerald-600 text-white  active:bg-emerald-800  font-medium py-3 rounded-lg text-lg transition">
                                 Proceed to Checkout
                             </button>
                         </form>
@@ -108,7 +108,7 @@
             <template x-if="!cartItems.length">
                 <div class="text-center text-gray-500 py-10">
                     <p class="text-xl"> Your cart is empty</p>
-                    <a href="{{ route('home') }}" class="mt-4 inline-block text-purple-600 hover:underline text-sm">
+                    <a href="{{ route('home') }}" class="mt-4 inline-block text-emerald-800 hover:underline text-sm">
                         Go back to shop
                     </a>
                 </div>
