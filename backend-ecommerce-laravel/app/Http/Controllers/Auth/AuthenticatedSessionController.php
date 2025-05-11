@@ -41,6 +41,9 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        // Move cart items from DB to cookies
+        Cart::moveDbCartItemsIntoCookies();
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

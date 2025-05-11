@@ -23,7 +23,11 @@ use Illuminate\Support\Arr;
 
  class Cart {
   
-        
+    /**
+     * Get cart items count from DB or cookies
+     * and sum the quantity of each item
+     * @return int
+     */
          
     public static function getCartItemsCount(): int
     {
@@ -41,7 +45,12 @@ use Illuminate\Support\Arr;
             );
         }
     }  
+   
 
+    /**
+     * Get cart items from DB or cookies
+     * @return array
+     */
 
     public static function getCartItems()
     {
@@ -55,7 +64,12 @@ use Illuminate\Support\Arr;
             return self::getCookieCartItems();
         }
     }
+    
 
+    /**
+     * Get cart items from cookies
+     * @return array
+     */
 
     public static function getCookieCartItems()
     {
@@ -71,14 +85,28 @@ use Illuminate\Support\Arr;
             0
         );
     }
+    
 
+    /**
+     * Move cart items from cookies to DB when user logs in or registers
+     * @return void
+     */
 
     public static function moveCartItemsIntoDb()
     {
         $request = \request();
+            $request = \request();
+            $user = $request->user(); // Get the authenticated user
+
+    if (!$user) {
+        return;
+    }
         $cartItems = self::getCookieCartItems();
+        CartItem::where('user_id', $user->id)->delete();
+
         $dbCartItems = CartItem::where(['user_id' => $request->user()->id])->get()->keyBy('product_id');
         $newCartItems = [];
+
         foreach ($cartItems as $cartItem) {
             if (isset($dbCartItems[$cartItem['product_id']])) {
                 continue;
@@ -93,11 +121,14 @@ use Illuminate\Support\Arr;
         if (!empty($newCartItems)) {
             CartItem::insert($newCartItems);
         }
+       
+        cookie()->queue(cookie('cart_items', '', -1)); //delete cookie
+        
     }
 
 
 
-        /**
+    /**
      *
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      * @author emerson hernandez <emersonhdz94@gmail.com>
@@ -111,6 +142,40 @@ use Illuminate\Support\Arr;
 
         return [$products, $cartItems];
     }
+
+     /**
+      * Move cart items from DB to cookies when user logs out
+      * @return void
+      */
+    
+
+    public static function moveDbCartItemsIntoCookies(): void
+{
+    $request = \request();
+    $user = $request->user();
+
+    if (!$user) {
+        return;
+    }
+
+    $dbCartItems = CartItem::where('user_id', $user->id)->get();
+
+    $cookieCartItems = [];
+
+    foreach ($dbCartItems as $item) {
+        $cookieCartItems[] = [
+            'product_id' => $item->product_id,
+            'quantity' => $item->quantity,
+        ];
+    }
+
+    // Save the cart items in cookies
+    cookie()->queue(cookie(
+        'cart_items',
+        json_encode($cookieCartItems),
+        60 * 24 * 7 // coookie (7 days)
+    ));
+}
 
 
  }
