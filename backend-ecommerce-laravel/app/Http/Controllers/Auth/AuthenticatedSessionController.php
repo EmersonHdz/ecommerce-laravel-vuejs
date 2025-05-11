@@ -9,6 +9,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Models\CartItem;
+use App\Helpers\Cart;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -28,6 +30,8 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        Cart::MoveCartItemsIntoDB();
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

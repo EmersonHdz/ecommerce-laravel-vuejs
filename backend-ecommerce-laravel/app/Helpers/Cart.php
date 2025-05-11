@@ -17,7 +17,7 @@ use Illuminate\Support\Arr;
 /**
  * Class Cart
  *
- * @author  Zura Sekhniashvili <zurasekhniashvili@gmail.com>
+ * @author  emerson hernandez <
  * @package App\Helpers
  */
 
