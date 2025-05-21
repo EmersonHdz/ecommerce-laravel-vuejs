@@ -4,6 +4,9 @@ require __DIR__.'/auth.php';
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ProfileShippingAddressController;
+use App\Http\Controllers\ProfileBillingAddressController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,11 +32,21 @@ Route::middleware(['guestOrVerified'])->group(function () {
     });
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'view'])->name('profile');
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Rutas relacionadas con el perfil del usuario
+    Route::get('/profile', [ProfileController::class, 'view'])->name('profile.view');
+    Route::post('/profile', [ProfileController::class, 'store'])->name('profile.store');
+    Route::patch('/profile/password-update', [ProfileController::class, 'update'])->name('profile.password.update');
+
+    //Rutas relacionadas con la dirección de envio del usuario
+    Route::post('profile/shippin-addess-create', [ProfileShippingAddress::class, 'create'])->name(('shippingAddress.create'));
+    Route::post('profile/shipping-address', [ProfileShippingAddressController::class, 'store'])->name('shippingAddress.store');
+    Route::patch('profile/shipping-address-update', [ProfileShippingAddressController::class, 'update'])->name('shippingAddress.update');
+
+        //Rutas relacionadas con la dirección de envio del usuario
+    Route::get('/profile/billing-address', [ProfileBillingAddressController::class, 'view'])->name('profile.billing');
+    Route::patch('/profile/billing-address', [ProfileBillingAddressController::class, 'update'])->name('profile.billing.update');
+
 });
 
 require __DIR__.'/auth.php';

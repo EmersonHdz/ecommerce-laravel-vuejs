@@ -46,7 +46,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
+    
+    /**
+     * create a function  to use in admin panel to sent a email to reser password user 
+     * @param string $token
+     * @param string|null $resetUrl
+     */
     public function sendPasswordResetNotification($token, $resetUrl = null)
     {
         $resetUrl = $resetUrl ?? url(route('password.reset', [
@@ -56,5 +61,13 @@ class User extends Authenticatable implements MustVerifyEmail
     
         $this->notify(new CustomResetPasswordNotification($token, $resetUrl));
     }
+    
+
+
+     public function customer()
+    {
+        return $this->hasOne(Customer::class, 'user_id');
+    }
+
  
 }
