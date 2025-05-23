@@ -8,7 +8,7 @@
     }" 
     class="max-w-2xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-all duration-300 hover:shadow-2xl">
     
-    <form class="space-y-6" x-data="{
+    <form x-ref="form"  class="space-y-6" x-data="{
                 countries: {{ json_encode($countries) }},
                 shippingAddress: {{ json_encode([
                     'address1' => old('shipping.address1', $shippingAddress->address1),
@@ -18,7 +18,7 @@
                     'country_code' => old('shipping.country_code', $shippingAddress->country_code),
                     'zipcode' => old('shipping.zipcode', $shippingAddress->zipcode),
                 ]) }},
-                isLoading: false,
+                isSubmitting: false,
                 get shippingCountryStates() {
                     const country = this.countries.find(c => c.code === this.shippingAddress.country_code)
                     if (country && country.states) {
@@ -27,12 +27,13 @@
                     return null;
                 },
                 async submitForm() {
-                    this.isLoading = true;
+                    this.isSubmitting = true;
                     try {
                         await $nextTick();
-                        this.$el.submit();
-                    } finally {
-                        this.isLoading = false;
+                        this.$refs.form.submit();
+                    } catch (e) {
+                        this.isSubmitting = false;
+                        console.error('Form submission failed:', e);
                     }
                 }
             }" 
@@ -56,7 +57,7 @@
                    x-model="shippingAddress.address1" 
                    placeholder="123 Main St" 
                    required
-                   class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition duration-200">
             <x-input-error :messages="$errors->get('shipping_address1')" class="mt-1 text-sm text-red-600" />
         </div>
 
@@ -68,7 +69,7 @@
                    name="shipping[address2]" 
                    x-model="shippingAddress.address2" 
                    placeholder="Apt, suite, etc." 
-                   class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition duration-200">
             <x-input-error :messages="$errors->get('shipping_address2')" class="mt-1 text-sm text-red-600" />
         </div>
 
@@ -81,7 +82,7 @@
                    x-model="shippingAddress.city" 
                    placeholder="New York" 
                    required
-                   class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition duration-200">
             <x-input-error :messages="$errors->get('shipping_city')" class="mt-1 text-sm text-red-600" />
         </div>
 
@@ -94,7 +95,7 @@
                    x-model="shippingAddress.zipcode"  
                    placeholder="10001" 
                    required
-                   class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition duration-200">
             <x-input-error :messages="$errors->get('shipping_zipcode')" class="mt-1 text-sm text-red-600" />
         </div>
 
@@ -107,7 +108,7 @@
                     <select name="shipping[country_code]" 
                             x-model="shippingAddress.country_code" 
                             required
-                            class="w-full px-4 py-3 pr-8 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white appearance-none transition duration-200">
+                            class="w-full px-4 py-3 pr-8 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white appearance-none transition duration-200">
                         <option value="">Select Country</option>
                         <template x-for="country of countries" :key="country.code">
                             <option :selected="country.code === shippingAddress.country_code" 
@@ -131,7 +132,7 @@
                         <select name="shipping[state]" 
                                 x-model="shippingAddress.state" 
                                 required
-                                class="w-full px-4 py-3 pr-8 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white appearance-none transition duration-200">
+                                class="w-full px-4 py-3 pr-8 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white appearance-none transition duration-200">
                             <option value="">Select State</option>
                             <template x-for="[code, state] of Object.entries(shippingCountryStates)" :key="code">
                                 <option :selected="code === shippingAddress.state" 
@@ -153,24 +154,26 @@
                            x-model="shippingAddress.state" 
                            placeholder="State/Province" 
                            required
-                           class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                           class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition duration-200">
                 </template>
             </div>
         </div>
 
         <!-- Submit Button -->
         <div class="pt-4">
-            <button type="submit" 
-                    :disabled="isLoading"
-                    class="w-full flex justify-center items-center px-6 py-3.5 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 rounded-lg transition duration-200 dark:bg-blue-700 dark:hover:bg-blue-800">
-                <span x-show="!isLoading">Update Shipping Address</span>
-                <span x-show="isLoading" class="flex items-center">
-                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <button type="submit" :disabled="isSubmitting"
+                class="w-full flex justify-center items-center px-6 py-3.5 text-base font-medium text-white bg-emerald-600 hover:bg-emerald-700  rounded-lg transition duration-300 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-800 disabled:opacity-50 disabled:cursor-not-allowed">
+                <span x-show="!isSubmitting">Update Shipping Address</span>
+                <span x-show="isSubmitting" class="flex items-center">
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
                     Processing...
                 </span>
+                
             </button>
         </div>
     </form>

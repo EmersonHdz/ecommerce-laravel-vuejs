@@ -6,7 +6,7 @@
             }
         }
     }
-"   class="max-w-md mx-auto p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-all duration-300 hover:shadow-2xl">
+    "   class="max-w-md mx-auto p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-all duration-300 hover:shadow-2xl">
     
     <form x-data="{ isLoading: false }" 
           action="{{ route('profile.password.update') }}" 
@@ -28,7 +28,7 @@
                     placeholder="Enter your current password" 
                     required
                     autocomplete="current-password"
-                    class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200 pr-10">
+                    class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition duration-200 pr-10">
 
             <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 cursor-pointer hover:text-gray-600 dark:hover:text-gray-300"
                  @click="show = !show">
@@ -52,8 +52,7 @@
                        placeholder="Enter your new password" 
                        required
                        autocomplete="new-password"
-                       x-model="password"
-                       class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200 pr-10">
+                       class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition duration-200 pr-10">
                 <div @click="show = !show"
                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 cursor-pointer hover:text-gray-600 dark:hover:text-gray-300">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" @click="const input = $el.previousElementSibling; input.type = input.type === 'password' ? 'text' : 'password'">
@@ -75,7 +74,7 @@
                        placeholder="Repeat your new password" 
                        required
                        autocomplete="new-password"
-                       class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200 pr-10">
+                       class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition duration-200 pr-10">
                 <div @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 cursor-pointer hover:text-gray-600 dark:hover:text-gray-300">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" @click="const input = $el.previousElementSibling; input.type = input.type === 'password' ? 'text' : 'password'">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -91,7 +90,7 @@
         <!-- Submit Button -->
         <button type="submit" 
                 :disabled="isLoading"
-                class="w-full flex justify-center items-center px-6 py-3.5 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 rounded-lg transition duration-200 dark:bg-blue-700 dark:hover:bg-blue-800">
+                class="w-full flex justify-center items-center px-6 py-3.5 text-base font-medium text-white focus:ring-emerald-500 focus:border-emerald-500 focus:ring-4 rounded-lg transition duration-200 dark:bg-emerald-700 dark:hover:bg-emerald-800 disabled:opacity-50 disabled:cursor-not-allowed ">
             <span x-show="!isLoading">Update Password</span>
             <span x-show="isLoading" class="flex items-center">
                 <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -100,6 +99,7 @@
                 </svg>
                 Updating...
             </span>
+            
         </button>
     </form>
 </div>
