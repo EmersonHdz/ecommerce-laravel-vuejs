@@ -28,7 +28,7 @@
                        placeholder="Enter your first name" 
                        required
                        autocomplete="given-name"
-                       class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                       class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition duration-200">
                 <x-input-error :messages="$errors->get('first_name')" class="mt-1 text-sm text-red-600" />
             </div>
 
@@ -42,7 +42,7 @@
                        placeholder="Enter your last name" 
                        required
                        autocomplete="family-name"
-                       class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                       class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition duration-200">
                 <x-input-error :messages="$errors->get('last_name')" class="mt-1 text-sm text-red-600" />
             </div>
 
@@ -56,7 +56,7 @@
                        placeholder="Enter your email address" 
                        required
                        autocomplete="email"
-                       class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                       class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition duration-200">
                 <x-input-error :messages="$errors->get('email')" class="mt-1 text-sm text-red-600" />
             </div>
 
@@ -76,7 +76,7 @@
                            placeholder="Enter your phone number" 
                            required
                            autocomplete="tel"
-                           class="w-full pl-10 px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                           class="w-full pl-10 px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition duration-200">
                 </div>
                 <x-input-error :messages="$errors->get('phone')" class="mt-1 text-sm text-red-600" />
             </div>
@@ -84,7 +84,7 @@
             <!-- Submit Button -->
             <button type="submit" 
                     :disabled="isLoading"
-                    class="w-full flex justify-center items-center px-6 py-3.5 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 rounded-lg transition duration-200 dark:bg-blue-700 dark:hover:bg-blue-800">
+                    class="w-full flex justify-center items-center px-6 py-3.5 text-base font-medium text-white focus:ring-emerald-500 focus:border-emerald-500 focus:ring-4  rounded-lg transition duration-200 dark:bg-emerald-700 dark:hover:bg-emerald-800 disabled:opacity-50 disabled:cursor-not-allowed">
                 <span x-show="!isLoading">Update Profile</span>
                 <span x-show="isLoading" class="flex items-center">
                     <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

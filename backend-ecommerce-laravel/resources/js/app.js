@@ -12,6 +12,11 @@ window.Alpine = Alpine;
 
 document.addEventListener("alpine:init", async () => {
 
+  Alpine.data('passwordField', () => ({
+    show: false,
+    toggle() { this.show = !this.show;},
+    inputType() { return this.show ? 'text' : 'password';}}));
+
 
   Alpine.data("toast", () => ({
     visible: false,

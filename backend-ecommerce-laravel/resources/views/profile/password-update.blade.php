@@ -23,15 +23,15 @@
         <!-- Current Password -->
         <div class="space-y-2 mb-4">
             <label for="old_password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Current Password *</label>
-             <div x-data="{ show: false }" class="relative">
-             <input id="old_password" name="old_password"  :type="show ? 'text' : 'password'" 
+             <div x-data="passwordField" class="relative">
+             <input id="old_password" name="old_password"  :type="inputType()" 
                     placeholder="Enter your current password" 
                     required
                     autocomplete="current-password"
                     class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition duration-200 pr-10">
 
             <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 cursor-pointer hover:text-gray-600 dark:hover:text-gray-300"
-                 @click="show = !show">
+                 @click="toggle">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -45,15 +45,15 @@
         <!-- New Password -->
         <div class="space-y-2 mb-4">
             <label for="new_password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">New Password *</label>
-            <div class="relative" x-data="{ show: false }">
+            <div class="relative" x-data="passwordField">
                 <input id="new_password" 
                        name="new_password" 
-                       :type="show ? 'text' : 'password'"
+                       :type="inputType()"
                        placeholder="Enter your new password" 
                        required
                        autocomplete="new-password"
                        class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition duration-200 pr-10">
-                <div @click="show = !show"
+                <div @click="toggle"
                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 cursor-pointer hover:text-gray-600 dark:hover:text-gray-300">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" @click="const input = $el.previousElementSibling; input.type = input.type === 'password' ? 'text' : 'password'">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -67,15 +67,15 @@
         <!-- Confirm New Password -->
         <div class="space-y-2 mb-6">
             <label for="new_password_confirmation" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Confirm New Password *</label>
-            <div  x-data="{ show: false}" class="relative">
+            <div  x-data="passwordField" class="relative">
                 <input id="new_password_confirmation" 
                        name="new_password_confirmation" 
-                       :type="show ? 'text' : 'password'" 
+                       :type="inputType()" 
                        placeholder="Repeat your new password" 
                        required
                        autocomplete="new-password"
                        class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition duration-200 pr-10">
-                <div @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 cursor-pointer hover:text-gray-600 dark:hover:text-gray-300">
+                <div @click="toggle" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 cursor-pointer hover:text-gray-600 dark:hover:text-gray-300">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" @click="const input = $el.previousElementSibling; input.type = input.type === 'password' ? 'text' : 'password'">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
