@@ -85,7 +85,7 @@
   
       <!-- Description -->
 <div x-data="{ expanded: false }" class="text-gray-100">
-    <!-- Resumen de 3 líneas -->
+    <!-- 3 lines resum -->
     <div
       x-show="!expanded"
       x-cloak
@@ -94,7 +94,7 @@
       {!! $product->description !!}
     </div>
   
-    <!-- Descripción completa -->
+    <!-- Descripción -->
     <div
       x-show="expanded"
       x-collapse
@@ -103,7 +103,7 @@
       {!! $product->description !!}
     </div>
   
-    <!-- Botón Read More / Less -->
+    <!--Read More / Less -->
     <div class="text-right">
       <button
         @click="expanded = !expanded"

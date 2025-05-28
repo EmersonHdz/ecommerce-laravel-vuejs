@@ -9,7 +9,7 @@
     "   class="max-w-md mx-auto p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-all duration-300 hover:shadow-2xl">
     
     <form x-data="{ isLoading: false }" 
-          action="{{ route('profile.password.update') }}" 
+          action="{{ route('profile.billing.update') }}" 
           method="POST"
           @submit.prevent="isLoading = true; $el.submit();">
         @csrf

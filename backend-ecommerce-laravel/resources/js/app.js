@@ -17,7 +17,7 @@ document.addEventListener("alpine:init", async () => {
     toggle() { this.show = !this.show;},
     inputType() { return this.show ? 'text' : 'password';}}));
 
-
+ 
   Alpine.data("toast", () => ({
     visible: false,
     delay: 5000,
