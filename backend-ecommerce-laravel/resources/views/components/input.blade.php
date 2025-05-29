@@ -17,14 +17,14 @@ $attributeName = preg_replace('/(\w+)\[(\w+)]/', '$1.$2', $attributes['name']);
     @endif
     @if ($type === 'select')
         <select {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge([
-            'class' => 'border-gray-300 focus:border-purple-500 focus:outline-none focus:ring-purple-500 rounded-md w-full ' .
+            'class' => 'rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition duration-200 w-full ' .
              ($errors->has($attributeName) ? $errorClasses : (old($attributeName) ? $successClasses :$defaultClasses))
         ]) !!}>
             {{ $slot }}
         </select>
     @else
         <input {{ $disabled ? 'disabled' : '' }} type="{{$type}}" {!! $attributes->merge([
-            'class' => 'border-gray-300 focus:border-purple-500 focus:outline-none focus:ring-purple-500 rounded-md w-full ' .
+            'class' => 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition duration-200' .
              ($errors->has($attributeName) ? $errorClasses : (old($attributeName) ? $successClasses :$defaultClasses))
         ]) !!}>
     @endif

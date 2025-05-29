@@ -11,13 +11,14 @@ Alpine.plugin(collapse)
 window.Alpine = Alpine;
 
 document.addEventListener("alpine:init", async () => {
-
+ 
+  // show password field
   Alpine.data('passwordField', () => ({
     show: false,
     toggle() { this.show = !this.show;},
     inputType() { return this.show ? 'text' : 'password';}}));
 
- 
+  // toster notification
   Alpine.data("toast", () => ({
     visible: false,
     delay: 5000,
@@ -59,7 +60,7 @@ document.addEventListener("alpine:init", async () => {
     },
   }));
 
-    // Mostrar SweetAlert si hay mensaje de estado (mismo efecto que en tu Blade)
+    // show sweet alert message
     const statusElement = document.getElementById('status-message');
     if (statusElement) {
       Swal.fire({
@@ -71,9 +72,6 @@ document.addEventListener("alpine:init", async () => {
       });
     }
 
- 
-   
-    
 
   Alpine.data("productItem", (product) => {
     return {

@@ -3,21 +3,24 @@
 
 <div x-data="{ step: 1 }" class="relative space-y-5 m-10">
 
-  <!-- Navigation -->
-  <div class="flex justify-center gap-4 mb-6">
-    <button @click="step = 1"
-            :class="step === 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 dark:text-white'"
-            class="px-4 py-2 rounded-lg transition-all duration-300">Profile</button>
+<!-- Navigation -->
+<div class="flex justify-center gap-4 mb-6">
+  <a      
+          @click="step = 1"
+          :class="step === 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 dark:text-white'"
+          class="px-4 py-2 rounded-lg transition-all duration-300">Profile</a>
 
-    <button @click="step = 2"
-            :class="step === 2 ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 dark:text-white'"
-            class="px-4 py-2 rounded-lg transition-all duration-300">Password</button>
+  <a      
+          @click="step = 2"
+          :class="step === 2 ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 dark:text-white'"
+          class="px-4 py-2 rounded-lg transition-all duration-300">Password</a>
 
-    <button @click="step = 3"
-            :class="step === 3 ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 dark:text-white'"
-            class="px-4 py-2 rounded-lg transition-all duration-300">Shipping</button>
+  <a
+          @click="step = 3"
+          :class="step === 3 ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 dark:text-white'"
+          class="px-4 py-2 rounded-lg transition-all duration-300">Shipping</a>
+</div>
 
-  </div>
 
   <div class="">
     <!-- Step 1 -->
