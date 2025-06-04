@@ -2,6 +2,20 @@
 
 <x-app-layout>
     <div class="max-w-3xl mx-auto px-4 py-6">
+        @if(session('error'))
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops!',
+                text: @json(session('error')),
+                confirmButtonColor: '#3085d6',
+            });
+        });
+    </script>
+@endif
+
         <div class="flex items-center justify-between mb-8">
             <h1 class="text-3xl font-bold text-cyan-100">Shopping Cart</h1>
             <a href="{{ route('home') }}" class="flex items-center rounded">
@@ -96,7 +110,7 @@
                         
                         
                         <!-- Checkout Button -->
-                        <form action="{{ route('cart.checkout') }}" method="post">
+                        <form action="{{ route('cart.checkout') }}" method="POST">
                             @csrf
                             <button type="submit" class="w-full hover:bg-emerald-700 bg-emerald-600 text-white  active:bg-emerald-800  font-medium py-3 rounded-lg text-lg transition">
                                 Proceed to Checkout

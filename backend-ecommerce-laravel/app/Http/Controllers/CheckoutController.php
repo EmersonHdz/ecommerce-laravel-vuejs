@@ -123,7 +123,6 @@ class CheckoutController extends Controller
         }
 
         DB::commit();
-        CartItem::where(['user_id' => $user->id])->delete();
 
         return redirect($session->url);
     }
@@ -151,6 +150,8 @@ class CheckoutController extends Controller
             if ($payment->status === PaymentStatus::Pending->value) {
                 $this->updateOrderAndSession($payment);
             }
+            CartItem::where('user_id', $user->id)->delete();
+
             $customer = \Stripe\Customer::retrieve($session->customer);
 
             return view('checkout.success', compact('customer'));
@@ -198,48 +199,59 @@ class CheckoutController extends Controller
 
         return redirect($session->url);
     }
+    
+    public function webhook(Request $request)
+{
+    \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET_KEY'));
+    $endpoint_secret = env('WEBHOOK_SECRET_KEY');
 
-    public function webhook()
-    {
-        \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET_KEY'));
+    $payload = $request->getContent();
+    $sig_header = $request->header('Stripe-Signature');
+    $event = null;
 
-        $endpoint_secret = env('WEBHOOK_SECRET_KEY');
-
-        $payload = @file_get_contents('php://input');
-        $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
-        $event = null;
-
-        try {
-            $event = \Stripe\Webhook::constructEvent(
-                $payload, $sig_header, $endpoint_secret
-            );
-        } catch (\UnexpectedValueException $e) {
-            // Invalid payload
-            return response('', 401);
-        } catch (\Stripe\Exception\SignatureVerificationException $e) {
-            // Invalid signature
-            return response('', 402);
-        }
-
-        // Handle the event
-        switch ($event->type) {
-            case 'checkout.session.completed':
-                $paymentIntent = $event->data->object;
-                $sessionId = $paymentIntent['id'];
-
-                $payment = Payment::query()
-                    ->where(['session_id' => $sessionId, 'status' => PaymentStatus::Pending])
-                    ->first();
-                if ($payment) {
-                    $this->updateOrderAndSession($payment);
-                }
-            // ... handle other event types
-            default:
-                echo 'Received unknown event type ' . $event->type;
-        }
-
-        return response('', 200);
+    try {
+        $event = \Stripe\Webhook::constructEvent(
+            $payload, $sig_header, $endpoint_secret
+        );
+    } catch (\UnexpectedValueException $e) {
+        Log::error('Invalid Stripe payload', ['message' => $e->getMessage()]);
+        return response('Invalid payload', 401);
+    } catch (\Stripe\Exception\SignatureVerificationException $e) {
+        Log::error('Invalid Stripe signature', ['message' => $e->getMessage()]);
+        return response('Invalid signature', 402);
     }
+
+    switch ($event->type) {
+        case 'checkout.session.completed':
+            $session = $event->data->object;
+
+            $payment = Payment::query()
+                ->where('session_id', $session->id)
+                ->where('status', PaymentStatus::Pending)
+                ->first();
+
+            if ($payment) {
+                $this->updateOrderAndSession($payment);
+
+                // ✅delete cart items for the user
+                if ($payment->order && $payment->order->user_id) {
+                    CartItem::where('user_id', $payment->order->user_id)->delete();
+                    Log::info("delete cart to user ID: " . $payment->order->user_id);
+                }
+            } else {
+                Log::warning("No Payment was found with session_id: " . $session->id);
+            }
+
+            break;
+
+        default:
+            Log::info('Not managed event: ' . $event->type);
+            break;
+    }
+
+    return response('Webhook recevied', 200);
+}
+
 
     private function updateOrderAndSession(Payment $payment)
     {
