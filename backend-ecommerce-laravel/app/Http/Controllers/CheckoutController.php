@@ -23,8 +23,9 @@ class CheckoutController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = $request->user();
-
         $customer = $user->customer;
+
+
         if (!$customer->billingAddress || !$customer->shippingAddress) {
             return redirect()->route('profile.billing')->with('flash_message', 'Please complete your shipping address before continuing with your order.');
         }
@@ -127,40 +128,50 @@ class CheckoutController extends Controller
         return redirect($session->url);
     }
 
-    public function success(Request $request)
-    {
-        /** @var \App\Models\User $user */
-        $user = $request->user();
-        \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET_KEY'));
+   public function success(Request $request)
+{
+    /** @var \App\Models\User $user */
+    $user = $request->user();
+    \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET_KEY'));
 
-        try {
-            $session_id = $request->get('session_id');
-            $session = \Stripe\Checkout\Session::retrieve($session_id);
-            if (!$session) {
-                return view('checkout.failure', ['message' => 'Invalid Session ID']);
-            }
-
-            $payment = Payment::query()
-                ->where(['session_id' => $session_id])
-                ->whereIn('status', [PaymentStatus::Pending, PaymentStatus::Paid])
-                ->first();
-            if (!$payment) {
-                throw new NotFoundHttpException();
-            }
-            if ($payment->status === PaymentStatus::Pending->value) {
-                $this->updateOrderAndSession($payment);
-            }
-            CartItem::where('user_id', $user->id)->delete();
-
-            $customer = \Stripe\Customer::retrieve($session->customer);
-
-            return view('checkout.success', compact('customer'));
-        } catch (NotFoundHttpException $e) {
-            throw $e;
-        } catch (\Exception $e) {
-            return view('checkout.failure', ['message' => $e->getMessage()]);
+    try {
+        $session_id = $request->get('session_id');
+        $session = \Stripe\Checkout\Session::retrieve($session_id);
+        if (!$session) {
+            return view('checkout.failure', ['message' => 'Invalid Session ID']);
         }
+
+        $payment = Payment::query()
+            ->where(['session_id' => $session_id])
+            ->whereIn('status', [PaymentStatus::Pending, PaymentStatus::Paid])
+            ->first();
+
+        if (!$payment) {
+            throw new NotFoundHttpException();
+        }
+
+        if ($payment->status === PaymentStatus::Pending->value) {
+            $this->updateOrderAndSession($payment);
+        }
+
+        // delete cart items only if
+        CartItem::where('user_id', $user->id)->delete();
+
+        // Validación segura del customer
+        $customer = null;
+        if (!empty($session->customer)) {
+            $customer = \Stripe\Customer::retrieve($session->customer);
+        }
+
+        return view('checkout.success', compact('customer'));
+
+    } catch (NotFoundHttpException $e) {
+        throw $e;
+    } catch (\Exception $e) {
+        return view('checkout.failure', ['message' => $e->getMessage()]);
     }
+}
+
 
     public function failure(Request $request)
     {
