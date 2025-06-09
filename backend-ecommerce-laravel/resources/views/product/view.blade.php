@@ -1,39 +1,46 @@
 <x-app-layout>
     <div 
-      x-data="productItem({{ json_encode([
-        'id' => $product->id,
-        'slug' => $product->slug,
-        'image' => $product->image,
-        'title' => $product->title,
-        'price' => $product->price,
-        'addToCartUrl' => route('cart.add', $product)
-      ]) }})" 
+     x-data="productItem({{ json_encode([
+                    'id' => $product->id,
+                    'slug' => $product->slug,
+                    'image' => $product->image ?: '/img/noimage.png',
+                    'title' => $product->title,
+                    'price' => $product->price,
+                    'quantity' => $product->quantity,
+                    'addToCartUrl' => route('cart.add', $product)
+                ]) }})"
       class="max-w-6xl mx-auto px-4 py-8"
     >
       <div class="grid gap-10 lg:grid-cols-5">
         <!-- Image Gallery -->
         <div class="lg:col-span-3" 
-          x-data="{
-            images: ['{{$product->image}}'],
-            activeImage: null,
-            prev() {
-              let i = this.images.indexOf(this.activeImage);
-              this.activeImage = this.images[(i - 1 + this.images.length) % this.images.length];
-            },
-            next() {
-              let i = this.images.indexOf(this.activeImage);
-              this.activeImage = this.images[(i + 1) % this.images.length];
-            },
-            init() {
-              this.activeImage = this.images[0];
-            }
-          }"
-          x-init="init"
+         x-data="{
+                      images: {{$product->images->count() ?
+                 $product->images->map(fn($im) => $im->url) : json_encode(['/img/noimage.png'])}},
+                      activeImage: null,
+                      prev() {
+                          let index = this.images.indexOf(this.activeImage);
+                          if (index === 0)
+                              index = this.images.length;
+                          this.activeImage = this.images[index - 1];
+                      },
+                      next() {
+                          let index = this.images.indexOf(this.activeImage);
+                          if (index === this.images.length - 1)
+                              index = -1;
+                          this.activeImage = this.images[index + 1];
+                      },
+                      init() {
+                          this.activeImage = this.images.length > 0 ? this.images[0] : null
+                      }
+                    }"
         >
           <div class="relative rounded-xl overflow-hidden">
             <template x-for="image in images" :key="image">
-              <div x-show="activeImage === image" class="aspect-w-4 aspect-h-3">
+              <div  x-show="activeImage === image" class="aspect-w-4 aspect-h-3">
+
                 <img :src="image" alt="Product image" class="object-cover w-full h-full transition duration-300 rounded-xl" />
+
               </div>
             </template>
             <!-- Controls -->
@@ -116,3 +123,7 @@
       </div>
     </div>
   </x-app-layout>
+
+
+
+
