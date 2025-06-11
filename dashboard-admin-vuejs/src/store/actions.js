@@ -369,7 +369,9 @@ export function getOrder({commit}, id) {
   return axiosClient.get(`/orders/${id}`)
 }
 
-
+export function deleteOrder({commit}, id) {
+  return axiosClient.delete(`/orders/${id}`)
+}
 
 
 export function getCountries({commit}) {

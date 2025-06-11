@@ -94,7 +94,8 @@
                     <select name="shipping[state]" x-model="shippingAddress.state" class="w-full rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition duration-200">
                         <option value="">Select State</option>
                         <template x-for="[code, state] in Object.entries(shippingCountryStates)" :key="code">
-                            <option :value="code" x-text="state"></option>
+                              <option :selected="code === shippingAddress.state"
+                                        :value="code" x-text="state"></option>
                         </template>
                     </select>
                 </template>
@@ -137,7 +138,8 @@
                     <select name="billing[state]" x-model="billingAddress.state" class="w-full rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white transition duration-200">
                         <option value="">Select State</option>
                         <template x-for="[code, state] in Object.entries(billingCountryStates)" :key="code">
-                            <option :value="code" x-text="state"></option>
+                             <option :selected="code === billingAddress.state"
+                                     :value="code" x-text="state"></option>
                         </template>
                     </select>
                 </template>

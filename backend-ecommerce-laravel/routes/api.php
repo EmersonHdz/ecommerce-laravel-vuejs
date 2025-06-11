@@ -35,6 +35,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('orders/{order}', [OrderController::class, 'view']);
 
 
+
 });
 
 Route::post('/forgot-password', [PasswordResetLinkController::class, 'apiStore']);

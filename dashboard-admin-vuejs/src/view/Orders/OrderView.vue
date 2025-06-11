@@ -24,7 +24,7 @@
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div class="bg-blue-50 p-4 rounded-lg">
           <p class="text-sm text-blue-600 font-medium">Order Date</p>
-       <!--<p class="text-lg font-semibold">{{ formatDate(order.created_at) }}</p>  -->   
+          <p class="text-lg font-semibold">{{ formatDate(order.created_at) }}</p> 
         </div>
         <div class="bg-green-50 p-4 rounded-lg">
           <p class="text-sm text-green-600 font-medium">Total Amount</p>
@@ -43,11 +43,11 @@
       </div>
     </div>
 
-    <!-- Sección principal de 2 columnas -->
+    <!-- main section 2 col -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-      <!-- Columna izquierda - Información del cliente -->
+      <!-- customer informacion left -->
       <div class="lg:col-span-1 space-y-6">
-        <!-- Tarjeta de información del cliente -->
+        <!-- card information customer -->
         <div class="bg-white rounded-lg shadow-md p-6">
           <div class="flex items-center justify-between mb-4">
             <h2 class="text-lg font-semibold text-gray-800">Customer Information</h2>
@@ -88,7 +88,7 @@
           </div>
         </div>
 
-        <!-- Tarjeta de direcciones -->
+        <!-- address card -->
         <div class="bg-white rounded-lg shadow-md p-6">
           <h2 class="text-lg font-semibold text-gray-800 mb-4">Addresses</h2>
           <div class="space-y-4">
@@ -124,9 +124,9 @@
         </div>
       </div>
 
-      <!-- Columna derecha - Productos y estado -->
+      <!--col right product status -->
       <div class="lg:col-span-2 space-y-6">
-        <!-- Tarjeta de productos del pedido -->
+        <!-- product card -->
         <div class="bg-white rounded-lg shadow-md p-6">
           <h2 class="text-lg font-semibold text-gray-800 mb-4">Order Items ({{ order.items.length }})</h2>
           <div class="overflow-x-auto">
@@ -190,20 +190,20 @@
           </div>
         </div>
 
-        <!-- Tarjeta de historial de estado -->
+        <!-- historial status -->
         <div class="bg-white rounded-lg shadow-md p-6">
           <h2 class="text-lg font-semibold text-gray-800 mb-4">Order Status Timeline</h2>
           <OrderStatus :order="order" />
         </div>
 
-        <!-- Tarjeta de notas y acciones -->
+        <!-- note card and accions -->
         <div class="bg-white rounded-lg shadow-md p-6">
           <h2 class="text-lg font-semibold text-gray-800 mb-4">Order Notes</h2>
           <div class="space-y-4">
             <div v-for="note in order.notes" :key="note.id" class="border-l-4 border-blue-500 pl-4 py-2">
               <div class="flex justify-between items-start">
                 <p class="text-sm text-gray-600">{{ note.content }}</p>
-             <!--   <span class="text-xs text-gray-400">{{ formatDate(note.created_at) }}</span> --> 
+                  <span class="text-xs text-gray-400">{{ formatDate(note.created_at) }}</span> 
               </div>
               <p class="text-xs text-gray-500 mt-1">Added by {{ note.author }}</p>
             </div>
@@ -251,7 +251,17 @@ function onStatusChange() {
     })
 
 }
-console.log(onStatusChange)
+
+function formatDate(dateString) {
+  const options = { 
+    year: 'numeric', 
+    month: 'short', 
+    day: 'numeric',
+    hour: '2-digit', 
+    minute: '2-digit' 
+  };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+}
 
 </script>
 

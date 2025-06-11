@@ -76,4 +76,11 @@ class OrderController extends Controller
 
         return response('', 200);
     }
+
+      public function destroy(Order $order)
+    {
+        $order->delete();
+
+        return response()->noContent();
+    }
 }
