@@ -1,5 +1,5 @@
 <template>
-    <th @click="emit('click')" class="w-20 p-3 text-sm font-bold tracking-wide text-left"
+    <th @click="emit('click')" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
     :class="field === sortField ? 'bg-blue-50' : ''">
       <div class="flex justify-between">
         <slot></slot>
@@ -15,6 +15,8 @@
                stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"/>
           </svg>
+
+          
 
         </div>
       </div>

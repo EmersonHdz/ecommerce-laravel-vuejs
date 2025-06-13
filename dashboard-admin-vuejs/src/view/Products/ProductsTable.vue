@@ -9,11 +9,7 @@
           <span class="text-sm mr-5">Per Page</span>
           <select @change="getProducts(null)" v-model="perPage"
                   class="appearance-none relative block w-24 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
+             <option v-for="option in [5, 10, 20, 50, 100]" :value="option">{{ option }}</option>
           </select>
           <span class="text-sm ml-3">Found {{ products.total }} products</span>
         </div>

@@ -14,15 +14,13 @@
     <!-- Responsive Menu -->
     <div
         class="block fixed z-10 top-0 bottom-0 height h-full w-[220px] transition-all bg-slate-900 md:hidden"
-        :class="mobileMenuOpen ? 'left-0' : '-left-[220px]'"
-   >  
-         <!-- navigation start  -->
+        :class="mobileMenuOpen ? 'left-0' : '-left-[220px]'">  
+         <!-- navigation start  -->    
         <ul class="mt-10">
             <li>
                 <a
                     href="{{ route('cart.index')}}"
-                    class="relative flex items-center justify-between py-2 px-3 transition-colors hover:bg-slate-800"
-                >
+                    class="relative flex items-center justify-between py-2 px-3 transition-colors hover:bg-slate-800">
                     <div class="flex items-center">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -30,8 +28,7 @@
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
-                            stroke-width="2"
-                        >
+                            stroke-width="2">
                             <path
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
@@ -57,6 +54,7 @@
                         @click="open = !open"
                         class="cursor-pointer flex justify-between items-center py-2 px-3 hover:bg-slate-800"
                     >
+            <!-- my account -->     
               <span class="flex items-center">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -64,8 +62,7 @@
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
-                    stroke-width="2"
-                >
+                    stroke-width="2">
                   <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -78,8 +75,7 @@
                             xmlns="http://www.w3.org/2000/svg"
                             class="h-5 w-5"
                             viewBox="0 0 20 20"
-                            fill="currentColor"
-                        >
+                            fill="currentColor" >
                             <path
                                 fill-rule="evenodd"
                                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -92,6 +88,7 @@
                         x-transition
                         class="z-10 right-0 bg-slate-800 py-2"
                     >
+                        <!-- my profile -->
                         <li>
                             <a href="{{ route('profile.view') }}"  class="flex px-3 py-2 hover:bg-slate-900">
                                 <svg
@@ -111,11 +108,10 @@
                                 My Profile
                             </a>
                         </li>
+                            <!-- my orders -->
                         <li class="hover:bg-slate-900">
                             <a
-                                href="{{ route('order.index') }}"
-                                class="flex items-center px-3 py-2 hover:bg-slate-900"
-                            >
+                                href="{{ route('order.index') }}"   class="flex items-center px-3 py-2 hover:bg-slate-900" >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     class="h-5 w-5 mr-2"
@@ -218,7 +214,7 @@
                 </svg>
                 <span class="font-semibold text-sm">Cart</span>
              
-                <!-- Badge -->
+                <!-- cart count -->
                 <small
                     x-show="cartItemsCount"
                     x-transition
