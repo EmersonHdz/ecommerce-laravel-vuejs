@@ -102,17 +102,18 @@ export async function getProducts({commit, state}, {url = null, search = '', per
   const params = {
     per_page: state.products.limit,
   }
-  try {
-    const response = await axiosClient.get(url, {
-      params: {
-        ...params,
-        search, per_page, sort_field, sort_direction
-      }
-    });
-    commit('setProducts', [false, response.data]);
-  } catch {
-    commit('setProducts', [false]);
-  }
+  return axiosClient.get(url, {
+    params: {
+      ...params,
+      search, per_page, sort_field, sort_direction
+    }
+  })
+    .then((response) => {
+      commit('setProducts', [false, response.data])
+    })
+    .catch(() => {
+      commit('setProducts', [false])
+    })
 }
 
 
@@ -372,6 +373,8 @@ export function getOrder({commit}, id) {
 export function deleteOrder({commit}, id) {
   return axiosClient.delete(`/orders/${id}`)
 }
+
+
 
 
 export function getCountries({commit}) {

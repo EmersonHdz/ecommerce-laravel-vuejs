@@ -51,6 +51,9 @@ const routes = [
         path: 'orders/:id',
         name: 'app.orders.view',
          component: () => import('../view/Orders/OrderView.vue'),
+           props: {
+            id: (value) => /^\d+$/.test(value)
+          }
         },
         {
           path: 'users',

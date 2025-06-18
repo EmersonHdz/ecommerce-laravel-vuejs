@@ -14,3 +14,5 @@ export function currencyGBP(value) {
   return formattedValueGBP.replace('£', '£ ');
 }
   
+
+

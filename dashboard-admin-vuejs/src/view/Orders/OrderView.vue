@@ -1,5 +1,13 @@
 <template>
-  <div v-if="order" class="container mx-auto px-4 py-6">
+
+
+
+     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden animate-fade-in-down">
+      <Spinner v-if="loading"
+        class="absolute left-0 top-0 bg-white bg-opacity-70 right-0 bottom-0 flex items-center justify-center z-50"
+      />
+   <div>
+      <div v-if="order" class="container mx-auto px-4 py-6">
     <!-- Header con título y acciones -->
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-2xl font-bold text-gray-800">Order #{{ order.id }}</h1>
@@ -208,8 +216,8 @@
               <p class="text-xs text-gray-500 mt-1">Added by {{ note.author }}</p>
             </div>
             <div class="mt-4">
-              <textarea v-model="newNote" placeholder="Add a note about this order..." class="w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
-              <button @click="addNote" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+              <textarea  placeholder="Add a note about this order..." class="w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+              <button  class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                 Add Note
               </button>
             </div>
@@ -218,6 +226,8 @@
       </div>
     </div>
   </div>
+   </div>
+</div>
 </template>
 
 
@@ -228,21 +238,27 @@ import store from "../../store";
 import {useRoute} from "vue-router";
 import axiosClient from "../../lib/axios";
 import OrderStatus from "./OrderStatus.vue";
+import Spinner from "../../components/core/Spinner.vue";
 
 const route = useRoute()
-
+const loading = ref(false)
 const order = ref();
 const orderStatuses = ref([]);
 
 onMounted(() => {
+  loading.value = true
   store.dispatch('getOrder', route.params.id)
     .then(({data}) => {
       order.value = data
+    })
+    .finally(() => {
+      loading.value = false
     })
 
   axiosClient.get(`/orders/statuses`)
     .then(({data}) => orderStatuses.value = data)
 })
+
 
 function onStatusChange() {
   axiosClient.post(`/orders/change-status/${order.value.id}/${order.value.status}`)
