@@ -7,7 +7,7 @@
     ?>
     
         <?php if ($products->count() === 0): ?>
-            <div class="text-center text-gray-600 py-16 text-xl">
+            <div class="text-center text-gray-300 py-16 text-xl">
                 There are no products published
             </div>
         <?php else: ?>

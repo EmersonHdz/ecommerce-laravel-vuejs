@@ -86,7 +86,7 @@
       
 
           <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-              <div class="flex items-center justify-end space-x-2">
+              <div class="flex items-center  space-x-2">
                   <RouterLink :to="{name: 'app.orders.view', params: {id: order.id}}"
                   class="text-indigo-600 hover:text-indigo-900 p-1.5 rounded-md hover:bg-indigo-50"
                   title="Edit"
@@ -96,7 +96,7 @@
                   </svg>
                 </RouterLink>
 
-                <button
+                 <!--     <button
                   @click="deleteOrder(order)"
                   class="text-red-600 hover:text-red-900 p-1.5 rounded-md hover:bg-red-50"
                   title="Delete"
@@ -104,7 +104,7 @@
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
-                </button>
+                </button>-->
               </div>
             </td>
       </tr>
@@ -154,6 +154,7 @@ import Spinner from "../../components/core/Spinner.vue";
 import {Menu, MenuButton, MenuItem, MenuItems} from "@headlessui/vue";
 import {DotsVerticalIcon, PencilIcon, TrashIcon} from '@heroicons/vue/outline'
 import OrderStatus from "./OrderStatus.vue";
+import Swal from "sweetalert2";
 
 const perPage = ref(PRODUCTS_PER_PAGE);
 const search = ref('');
@@ -177,8 +178,14 @@ function getForPage(ev, link) {
 
 
 
- function formatDate(dateString) {
-  const options = { year: 'numeric', month: 'short', day: 'numeric' };
+function formatDate(dateString) {
+  const options = { 
+    day: 'numeric',
+    month: 'short', 
+    year: 'numeric', 
+    hour: '2-digit', 
+    minute: '2-digit' 
+  };
   return new Date(dateString).toLocaleDateString(undefined, options);
 }
 
@@ -208,17 +215,28 @@ function sortOrders(field) {
 }
 
 
-
-function deleteOrder(order) {
-  if (!confirm(`Are you sure you want to delete the order?`)) {
-    return
-  }
-  store.dispatch('deleteOrder', order.id)
-    .then(res => {
-      // TODO Show notification
-      store.dispatch('getOrders')
+  function deleteOrder(order) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        store.dispatch('deleteOrder', order.id)
+          .then(() => {
+            store.commit('showToast', 'Product was successfully deleted');
+            store.dispatch('getOrders')
+          })
+      }
     })
-}
+ 
+  }
+  
+  
 
 </script>
 

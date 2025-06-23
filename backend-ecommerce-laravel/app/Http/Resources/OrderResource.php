@@ -25,6 +25,7 @@ class OrderResource extends JsonResource
         return [
             'id' => $this->id,
             'status' => $this->status,
+             'payment_status' => $this->payment?->status, // Assuming payment is a relationship that returns a Payment model
             'total_price' => $this->total_price,
             'items' => $this->items->map(fn($item) => [
                 'id' => $item->id,

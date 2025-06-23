@@ -85,64 +85,33 @@
             {{ product.quantity }}
           </td>
           <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-            {{ product.updated_at }}
+            {{ formatDate(product.updated_at) }}
           </td>
-       <!-- Menu to actions-->
-          <td class="border-b p-2 ">
-            <Menu as="div" class="relative inline-block">
-            <div>
-            <MenuButton class="inline-flex items-center justify-center rounded-full w-10 h-10 bg-black bg-opacity-0 text-sm font-medium text-white hover:bg-indigo-200 focus:bg-opacity-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 transition-all duration-300">
-            <DotsVerticalIcon class="h-5 w-5 text-indigo-500" aria-hidden="true"/></MenuButton>
-        </div>
-  
-              <transition
-                enter-active-class="transition duration-100 ease-out"
-                enter-from-class="transform scale-95 opacity-0"
-                enter-to-class="transform scale-100 opacity-100"
-                leave-active-class="transition duration-75 ease-in"
-                leave-from-class="transform scale-100 opacity-100"
-                leave-to-class="transform scale-95 opacity-0"
-              >
-                <MenuItems
-                  class="absolute z-10 right-0 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+    
+              <!-- Menu to actions-->
+             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <div class="flex items-center space-x-2">
+                <RouterLink
+                  :to="{name: 'app.products.edit', params: {id: product.id}}"
+                  class="text-indigo-600 hover:text-indigo-900 p-1.5 rounded-md hover:bg-indigo-50"
+                  title="Edit"
                 >
-                  <div class="px-1 py-1">
-                    <MenuItem v-slot="{ active }">
-                      <router-link
-                        :to="{name: 'app.products.edit', params: {id: product.id}}"
-                        :class="[
-                          active ? 'bg-indigo-600 text-white' : 'text-gray-900',
-                          'group flex w-full items-center rounded-md px-2 py-2 text-sm',
-                        ]"
-                      >
-                        <PencilIcon
-                          :active="active"
-                          class="mr-2 h-5 w-5 text-indigo-400"
-                          aria-hidden="true"
-                        />
-                        Edit
-                      </router-link>
-                    </MenuItem>
-                    <MenuItem v-slot="{ active }">
-                      <button
-                        :class="[
-                          active ? 'bg-red-500 text-white' : 'text-gray-900',
-                          'group flex w-full items-center rounded-md px-2 py-2 text-sm',
-                        ]"
-                        @click="deleteProduct(product)"
-                      >
-                        <TrashIcon
-                          :class="[active ? 'mr-2 h-5 w-5 text-white' : 'mr-2 h-5 w-5 text-indigo-400']"
-                          aria-hidden="true"
-                        />
-                        Delete
-                      </button>
-                    </MenuItem>
-                  </div>
-                </MenuItems>
-              </transition>
-            </Menu>
-          </td>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                </RouterLink>
+
+                <button
+                  @click="deleteProduct(product)"
+                  class="text-red-600 hover:text-red-900 p-1.5 rounded-md hover:bg-red-50"
+                  title="Delete"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+            </td>
         </tr>
         </tbody>
 
@@ -262,7 +231,17 @@
     })
  
   }
-
+  
+function formatDate(dateString) {
+  const options = { 
+    day: 'numeric',
+    month: 'short', 
+    year: 'numeric', 
+    hour: '2-digit', 
+    minute: '2-digit' 
+  };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+}
   </script>
   
   <style scoped>

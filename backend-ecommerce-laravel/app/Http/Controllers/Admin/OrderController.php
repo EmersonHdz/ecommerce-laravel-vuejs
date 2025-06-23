@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderListResource;
 use App\Http\Resources\OrderResource;
@@ -30,7 +31,7 @@ class OrderController extends Controller
 
         $query = Order::query()
             ->withCount('items')
-            ->with('user.customer')
+            ->with('user.customer', 'payment')
             ->where('id', 'like', "%{$search}%")
             ->orderBy($sortField, $sortDirection)
             ->paginate($perPage);
@@ -40,7 +41,7 @@ class OrderController extends Controller
 
     public function view(Order $order)
     {
-        $order->load('items.product');
+        $order->load('items.product', 'payment');
 
         return new OrderResource($order);
     }
@@ -77,7 +78,7 @@ class OrderController extends Controller
         return response('', 200);
     }
 
-      public function destroy(Order $order)
+      public function remove(Order $order)
     {
         $order->delete();
 

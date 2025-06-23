@@ -70,23 +70,23 @@
          <!-- show products in row -->
         <tbody v-else>
         <tr v-for="user in users.data" :key="user.id">
-          <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">{{ user.id }}</td>
+          <td class="p-3 text-sm text-gray-700 whitespace-nowrap text">{{ user.id }}</td>
           <td class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">
            {{ user.name }}
           </td>
          
-          <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">
+          <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
             {{ user.email}}
           </td>
-          <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">
+          <td class="p-3 text-sm  text-gray-700 whitespace-nowrap">
             {{ user.phone }}
           </td>
-          <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+          <td class="p-3 text-sm  text-gray-700 whitespace-nowrap">
             {{ formatDate(user.created_at) }}
           </td>
        <!-- Menu to actions-->
              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-              <div class="flex items-center justify-end space-x-2">
+              <div class="flex items-center  space-x-2">
                 <RouterLink
                   :to="{name: 'app.users.edit', params: {id: user.id}}"
                   class="text-indigo-600 hover:text-indigo-900 p-1.5 rounded-md hover:bg-indigo-50"

@@ -30,20 +30,26 @@
     <!-- Resumen rápido del pedido -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <!-- Order date -->
         <div class="bg-blue-50 p-4 rounded-lg">
           <p class="text-sm text-blue-600 font-medium">Order Date</p>
           <p class="text-lg font-semibold">{{ formatDate(order.created_at) }}</p> 
         </div>
+        <!-- total amount -->
         <div class="bg-green-50 p-4 rounded-lg">
           <p class="text-sm text-green-600 font-medium">Total Amount</p>
-          <p class="text-lg font-semibold">{{ $filters.currencyUSD(order.total_price) }}</p>
+          <p class="text-lg font-semibold">{{ $filters.currencyGBP(order.total_price) }}</p>
         </div>
+        <!-- Payment method card -->
         <div class="bg-purple-50 p-4 rounded-lg">
-          <p class="text-sm text-purple-600 font-medium">Payment Method</p>
-          <p class="text-lg font-semibold">{{ order.payment_method || 'Credit Card' }}</p>
+          <p class="text-sm text-purple-600 font-medium">Order has been</p>
+           <p class="text-lg font-semibold">{{ order.payment_status || 'Credit Card' }}</p>
+  
         </div>
+        <!-- Order status card -->
         <div class="bg-yellow-50 p-4 rounded-lg">
           <p class="text-sm text-yellow-600 font-medium">Status</p>
+         
           <select v-model="order.status" @change="onStatusChange" class="w-full mt-1 bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
             <option v-for="status of orderStatuses" :value="status">{{ status }}</option>
           </select>
@@ -166,32 +172,32 @@
                     </div>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ $filters.currencyUSD(item.unit_price) }}
+                    {{ $filters.currencyGBP(item.unit_price) }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {{ item.quantity }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {{ $filters.currencyUSD(item.unit_price * item.quantity) }}
+                    {{ $filters.currencyGBP(item.unit_price * item.quantity) }}
                   </td>
                 </tr>
               </tbody>
               <tfoot class="bg-gray-50">
                 <tr>
                   <td colspan="3" class="px-6 py-3 text-right text-sm font-medium text-gray-500">Subtotal</td>
-                  <td class="px-6 py-3 text-sm font-medium text-gray-900">{{ $filters.currencyUSD(order.total_price) }}</td>
+                  <td class="px-6 py-3 text-sm font-medium text-gray-900">{{ $filters.currencyGBP(order.total_price) }}</td>
                 </tr>
                 <tr>
                   <td colspan="3" class="px-6 py-3 text-right text-sm font-medium text-gray-500">Shipping</td>
-                  <td class="px-6 py-3 text-sm font-medium text-gray-900">{{ $filters.currencyUSD(order.shipping_cost || 0) }}</td>
+                  <td class="px-6 py-3 text-sm font-medium text-gray-900">{{ $filters.currencyGBP(order.shipping_cost || 0) }}</td>
                 </tr>
                 <tr>
                   <td colspan="3" class="px-6 py-3 text-right text-sm font-medium text-gray-500">Tax</td>
-                  <td class="px-6 py-3 text-sm font-medium text-gray-900">{{ $filters.currencyUSD(order.tax_amount || 0) }}</td>
+                  <td class="px-6 py-3 text-sm font-medium text-gray-900">{{ $filters.currencyGBP(order.tax_amount || 0) }}</td>
                 </tr>
                 <tr>
                   <td colspan="3" class="px-6 py-3 text-right text-sm font-medium text-gray-500">Total</td>
-                  <td class="px-6 py-3 text-sm font-bold text-gray-900">{{ $filters.currencyUSD(order.total_price + (order.shipping_cost || 0) + (order.tax_amount || 0)) }}</td>
+                  <td class="px-6 py-3 text-sm font-bold text-gray-900">{{ $filters.currencyGBP(order.total_price + (order.shipping_cost || 0) + (order.tax_amount || 0)) }}</td>
                 </tr>
               </tfoot>
             </table>
@@ -240,16 +246,23 @@ import axiosClient from "../../lib/axios";
 import OrderStatus from "./OrderStatus.vue";
 import Spinner from "../../components/core/Spinner.vue";
 
+
 const route = useRoute()
 const loading = ref(false)
 const order = ref();
 const orderStatuses = ref([]);
+
+
+
 
 onMounted(() => {
   loading.value = true
   store.dispatch('getOrder', route.params.id)
     .then(({data}) => {
       order.value = data
+       if (!order.value.status) {
+        order.value.status = 'pending'
+      }
     })
     .finally(() => {
       loading.value = false
@@ -257,6 +270,7 @@ onMounted(() => {
 
   axiosClient.get(`/orders/statuses`)
     .then(({data}) => orderStatuses.value = data)
+
 })
 
 

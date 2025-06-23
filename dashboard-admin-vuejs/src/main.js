@@ -3,8 +3,7 @@ import store from './store';
 import router from './router';
 import './index.css';
 import App from './App.vue';
-import {currencyUSD} from './filters/currencyUSD.js'
-import {currencyGBP} from './filters/currencyUSD.js'
+import { currencyUSD, currencyGBP } from './filters/currencyS';
 import CKEditor from '@ckeditor/ckeditor5-vue'
 
 const app = createApp(App);
