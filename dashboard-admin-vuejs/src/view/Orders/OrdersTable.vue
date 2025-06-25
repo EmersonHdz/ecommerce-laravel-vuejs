@@ -47,6 +47,10 @@
                          @click="sortOrders('created_at')">
           Date
         </TableHeaderCell>
+          <TableHeaderCell field=" order.payment_status" :sort-field="sortField" :sort-direction="sortDirection"
+                         @click="sortOrders('created_at')">
+          Payment Method
+        </TableHeaderCell>
         <TableHeaderCell field="actions">
           Actions
         </TableHeaderCell>
@@ -82,6 +86,11 @@
         </td>
         <td class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">
           {{ formatDate(order.created_at) }}
+        </td>
+         <td class="border-b   ">
+          <p class="text-white py-1 px-2 w-2/4 rounded text-center bg-emerald-600">
+            {{  order.payment_status || 'N/A' }}
+          </p>
         </td>
       
 
@@ -161,7 +170,6 @@ const search = ref('');
 const orders = computed(() => store.state.orders);
 const sortField = ref('updated_at');
 const sortDirection = ref('desc')
-
 
 onMounted(() => {
   getOrders();

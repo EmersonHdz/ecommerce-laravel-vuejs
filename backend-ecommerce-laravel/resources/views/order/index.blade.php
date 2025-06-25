@@ -17,19 +17,22 @@
                     <thead class="bg-gray-50">
                         <tr>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Order #
+                                Order # 
                             </th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Date
                             </th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Status
+                                Order Status
                             </th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Amount
                             </th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Items
+                            </th>
+                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Payment Status
                             </th>
                             <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Actions
@@ -59,17 +62,32 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ $order->items_count }} item(s)
                             </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                            @if($order->payment)
+                             <span class="px-4 py-1 inline-flex text-sm leading-5 font-semibold rounded-full">
+                                {{ $order->payment->status }}
+                            </span>
+                            @else
+                               <span class="text-sm text-gray-400 italic">Not Available</span>
+                           @endif
+                           </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 @if (!$order->isPaid())
-                                <form action="{{ route('cart.checkout-order', $order) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                                        </svg>
-                                        Complete Payment
-                                    </button>
-                                </form>
+                            <form action="{{ route('cart.checkout-order', $order) }}" method="POST" 
+                            x-data="{ loading: false }" @submit="loading = true">
+                                @csrf
+                            <button type="submit" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none"
+                                    :disabled="loading">
+                            <template x-if="loading">
+                              <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"> </path>
+                              </svg>
+                            </template>
+                                <span x-text="loading ? 'Processing...' : 'Complete Payment'"></span>
+                               </button>
+                                  </form>
+
                                 @else
                                 <a href="{{ route('order.view', $order) }}" class="text-emerald-600 hover:text-emerald-900 mr-3">
                                     View Details

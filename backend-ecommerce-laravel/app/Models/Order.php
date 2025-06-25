@@ -14,10 +14,13 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['status', 'total_price', 'created_by', 'updated_by'];
+    protected $fillable = ['status', 'total_price', 'created_by', 'updated_by'];#
+
+
     /* 
    * Check if the order is paid checkout
    */
+  
     public function isPaid()
     {
         return $this->status === OrderStatus::Paid->value;

@@ -1,5 +1,5 @@
 <template>
-    <th @click="emit('click')" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+    <th @click="emit('click')" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
     :class="field === sortField ? 'bg-blue-50' : ''">
       <div class="flex justify-between">
         <slot></slot>

@@ -1,6 +1,7 @@
 <template>
   <!-- Sidebar component -->
   <aside class="w-[200px] bg-indigo-900 transition-all duration-300 text-gray-100 py-4 px-1">
+
     <!-- Logo Area -->
     <div class="rounded-lg text-center">
       <h1 class="text-2xl font-bold text-white my-2">Brand Name</h1>
@@ -26,7 +27,10 @@
 </template>
 
 <script setup>
-import { useRoute } from "vue-router";
+import { useRoute, useRouter,  } from "vue-router";
+import { onMounted} from "vue";
+import Swal from "sweetalert2";
+import store from '../store'
 
 // Array of navigation links
 const links = [
@@ -36,11 +40,48 @@ const links = [
   { name: 'app.users', icon: 'bi bi-person-circle', label: 'Users' },
 ];
 
+const router = useRouter();
+
 // Function to check if a link is active
 const isLinkActive = (routeName) => {
   const route = useRoute();
   return route.name === routeName;
 };
+
+
+
+
+onMounted(() => {
+  window.Echo.channel('orders')
+    .listen('OrderCreated', (e) => {
+      console.log('You have a new order: ', e.order);
+
+      Swal.fire({
+        title: `New Order #${e.order.id}`,
+        html: `
+          <p><strong>Total:</strong> $${e.order.total_price}</p>
+          <p><strong>Status:</strong> ${e.order.status}</p>
+          <p><strong>Pay:</strong> ${e.order.payment_status}</p>
+        `,
+        icon: 'success',
+        showCancelButton: true,
+        confirmButtonText: 'See Order',
+        cancelButtonText: 'close'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Redirigir al detalle de la orden
+          router.push({ name: 'app.orders.view', params: { id: e.order.id } });
+        }
+      });
+
+        store.dispatch('getOrders', {
+        per_page: store.state.orders.limit || 10,
+        search: store.state.orders.search || '',
+        sort_field: store.state.orders.sort_field || 'updated_at',
+        sort_direction: store.state.orders.sort_direction || 'desc'
+      });
+    });
+});
 </script>
 
 <style scoped>

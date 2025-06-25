@@ -124,7 +124,10 @@ class CheckoutController extends Controller
         }
 
         DB::commit();
+       
+      
 
+        
         return redirect($session->url);
     }
 
@@ -152,6 +155,8 @@ class CheckoutController extends Controller
 
         if ($payment->status === PaymentStatus::Pending->value) {
             $this->updateOrderAndSession($payment);
+               // Trigger the OrderCreated event
+             event(new \App\Events\OrderCreated(new \App\Http\Resources\OrderResource($payment->order)));
         }
 
         // delete cart items only if
@@ -163,6 +168,7 @@ class CheckoutController extends Controller
             $customer = \Stripe\Customer::retrieve($session->customer);
         }
 
+        
         return view('checkout.success', compact('customer'));
 
     } catch (NotFoundHttpException $e) {

@@ -346,24 +346,32 @@ export function deleteUser({commit}, id) {
 
 /**=================================ORDERS AREA ================================= */
 
-export function getOrders({commit, state}, {url = null, search = '', per_page, sort_field, sort_direction} = {}) {
-  commit('setOrders', [true])
-  url = url || '/orders'
+export function getOrders({ commit, state }, { url = null, search = null, per_page = null, sort_field = null, sort_direction = null } = {}) {
+  commit('setOrders', [true]);
+
+  url = url || '/orders';
+
+  // use the provided parameters or fallback to state defaults
   const params = {
-    per_page: state.orders.limit,
-  }
-  return axiosClient.get(url, {
-    params: {
-      ...params,
-      search, per_page, sort_field, sort_direction
-    }
-  })
+    per_page: per_page || state.orders.limit || 10,
+    search: search !== null ? search : state.orders.search || '',
+    sort_field: sort_field || state.orders.sort_field || 'updated_at',
+    sort_direction: sort_direction || state.orders.sort_direction || 'desc'
+  };
+
+  return axiosClient.get(url, { params })
     .then((response) => {
-      commit('setOrders', [false, response.data])
+      // update the state with the new parameters
+      state.orders.limit = params.per_page;
+      state.orders.search = params.search;
+      state.orders.sort_field = params.sort_field;
+      state.orders.sort_direction = params.sort_direction;
+
+      commit('setOrders', [false, response.data]);
     })
     .catch(() => {
-      commit('setOrders', [false])
-    })
+      commit('setOrders', [false]);
+    });
 }
 
 export function getOrder({commit}, id) {

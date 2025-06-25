@@ -10,6 +10,7 @@
         "laravel/framework": "^12.17.0",
         "laravel/sanctum": "^4.1.1",
         "laravel/tinker": "^2.10.1",
+        "pusher/pusher-php-server": "^7.2",
         "spatie/laravel-sluggable": "^3.7.5",
         "stripe/stripe-php": "^17.3.0"
     },

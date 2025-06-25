@@ -28,7 +28,10 @@ export default {
        to: null,
        page: 1,
        limit: null,
-       total: null
+       total: null, 
+       search: '',
+       sort_field: 'updated_at',
+       sort_direction: 'desc'
   },
     users: {
         loading: false,

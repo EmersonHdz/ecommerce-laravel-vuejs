@@ -34,8 +34,20 @@
                                 {{$order->status}}
                             </span>
                         </div>
+
+                        <div class="flex">
+                            <span class="text-gray-600 font-medium w-32">Payment Status:</span>
+                                 @if($order->payment)
+                             <span class="px-4 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-emerald-100 text-emerald-800">
+                                {{ $order->payment->status }}
+                            </span>
+                            @else
+                               <span class="text-sm text-gray-400 italic">Not Available</span>
+                           @endif
+                        </div>   
                     </div>
                 </div>
+
                 <div>
                     <h2 class="text-lg font-semibold text-gray-700 mb-3">Payment Summary</h2>
                     <div class="space-y-2">
@@ -94,13 +106,19 @@
         <!-- Payment Button (if not paid) -->
         @if (!$order->isPaid())
         <div class="p-6 border-t border-gray-200 bg-gray-50">
-            <form action="{{ route('cart.checkout-order', $order) }}" method="POST">
+            <form action="{{ route('cart.checkout-order', $order) }}" method="POST" 
+                  x-data="{ loading: false }" @submit="loading = true">
                 @csrf
-                <button type="submit" class="w-full md:w-auto flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                    </svg>
-                    Complete Payment
+                <button class="w-full md:w-auto flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors"
+                        type="submit"
+                        :disabled="loading">
+                <template x-if="loading">
+                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"> </path>
+                </svg>
+                </template>
+                <span x-text="loading ? 'Processing...' : 'Complete Payment'"></span>
                 </button>
             </form>
         </div>

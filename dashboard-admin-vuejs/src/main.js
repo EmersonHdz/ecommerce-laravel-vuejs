@@ -5,6 +5,8 @@ import './index.css';
 import App from './App.vue';
 import { currencyUSD, currencyGBP } from './filters/currencyS';
 import CKEditor from '@ckeditor/ckeditor5-vue'
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
 
 const app = createApp(App);
 
@@ -15,6 +17,7 @@ app
 .use(CKEditor)
 
 app.mount('#app');
+window.Pusher = Pusher;
 
 
 app.config.globalProperties.$filters = {
@@ -22,4 +25,12 @@ app.config.globalProperties.$filters = {
     currencyGBP
 
 }
+
+
+window.Echo = new Echo({
+  broadcaster: 'pusher',
+  key: 'a7ef6f0937d2d7250eeb',
+  cluster: 'eu',
+  forceTLS: true
+});
 

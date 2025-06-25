@@ -13,6 +13,7 @@ class OrderController extends Controller
         $user = $request->user();
 
         $orders = Order::withCount('items')
+           ->with('payment') 
             ->where(['created_by' => $user->id])
             ->orderBy('created_at', 'desc')
             ->paginate(10);
@@ -24,10 +25,11 @@ class OrderController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = \request()->user();
+
         if ($order->created_by !== $user->id) {
             return response("You don't have permission to view this order", 403);
         }
-
+         $order->load('payment'); 
         return view('order.view', compact('order'));
     }
 }
