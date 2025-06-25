@@ -65,6 +65,16 @@ const routes = [
           name: 'app.users.create',
          component: () => import('../view/Users/UserForm.vue'),
         },
+           {
+        path: 'customers',
+        name: 'app.customers',
+          component: () => import('../view/Customers/Customers.vue'),
+      },
+      {
+        path: 'customers/:id',
+        name: 'app.customers.view',
+          component: () => import('../view/Customers/CustomerView.vue'),
+      },
         
         {
           path: 'users/:id',

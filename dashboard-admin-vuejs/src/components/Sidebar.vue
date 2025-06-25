@@ -38,6 +38,7 @@ const links = [
   { name: 'app.products', icon: 'bi bi-cart-fill', label: 'Products' },
   { name: 'app.orders', icon: 'bi bi-bag-fill', label: 'Orders' },
   { name: 'app.users', icon: 'bi bi-person-circle', label: 'Users' },
+  { name: 'app.customers', icon: 'bi bi-person-badge', label: 'Customer' },
 ];
 
 const router = useRouter();
