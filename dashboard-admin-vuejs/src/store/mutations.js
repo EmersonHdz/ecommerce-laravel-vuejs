@@ -121,7 +121,7 @@ export function setCustomers(state, [loading, data = null]) {
       total: data.meta.total,
     }
   }
-  state.products.loading = loading;
+  state.customers.loading = loading;
 }
 
 /**
@@ -143,3 +143,6 @@ export function hideToast(state) {
   state.toast.message = ''; // Clear the message
 }
 
+export function setCountries(state, countries) {
+  state.countries = countries.data;
+}

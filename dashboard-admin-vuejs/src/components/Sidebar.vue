@@ -54,7 +54,7 @@ const isLinkActive = (routeName) => {
 
 onMounted(() => {
   window.Echo.channel('orders')
-    .listen('OrderCreated', (e) => {
+    .listen('.order.created', (e) => {
       console.log('You have a new order: ', e.order);
 
       Swal.fire({

@@ -383,7 +383,7 @@ export function deleteOrder({commit}, id) {
 }
 
 
-
+/** ============================ countries area ==================== */
 
 export function getCountries({commit}) {
   return axiosClient.get('countries')
@@ -417,9 +417,14 @@ export function getCustomer({commit}, id) {
   return axiosClient.get(`/customers/${id}`)
 }
 
-export function createCustomer({commit}, customer) {
+export function createCustomer({ commit }, customer) {
   return axiosClient.post('/customers', customer)
+    .catch(error => {
+      console.error('Error creating customer:', error.response?.data || error);
+      throw error; 
+    });
 }
+
 
 export function updateCustomer({commit}, customer) {
   return axiosClient.put(`/customers/${customer.id}`, customer)

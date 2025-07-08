@@ -9,6 +9,7 @@ use App\Http\Requests\CustomerRequest;
 use App\Http\Resources\CountryResource;
 use App\Http\Resources\CustomerListResource;
 use App\Http\Resources\CustomerResource;
+use App\Models\User;
 use App\Models\Country;
 use App\Models\Customer;
 use App\Models\CustomerAddress;
@@ -54,6 +55,7 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
+     
         return new CustomerResource($customer);
     }
 
@@ -104,20 +106,93 @@ class CustomerController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     *
+     * @param \App\Http\Requests\CustomerRequest $request
+     * @return \Illuminate\Http\Response
+     */
+
+    public function store(CustomerRequest $request)
+  {
+    $data = $request->validated();
+
+    DB::beginTransaction();
+
+    try {
+        // 1. Crear el User asociado primero
+        $user = User::create([
+            'name' => $data['first_name'] . ' ' . $data['last_name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+        ]);
+
+        // 2. Crear el Customer
+        $data['user_id'] = $user->id;
+        $data['status'] = $data['status'] ? CustomerStatus::Active->value : CustomerStatus::Disabled->value;
+        $data['created_by'] = auth()->id();
+
+        $customer = Customer::create($data);
+
+
+
+        // 3. Crear direcciones
+        $data['billingAddress']['customer_id'] = $customer->user_id;
+        $data['billingAddress']['type'] = AddressType::Billing->value;
+
+        $data['shippingAddress']['customer_id'] = $customer->user_id;
+        $data['shippingAddress']['type'] = AddressType::Shipping->value;
+
+        CustomerAddress::create($data['billingAddress']);
+        CustomerAddress::create($data['shippingAddress']);
+
+        DB::commit();
+        $customer = Customer::with('user')->find($customer->user_id);
+
+        return (new CustomerResource($customer))
+            ->response()
+            ->setStatusCode(201);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        Log::critical('Error creating customer: ' . $e->getMessage());
+        return response()->json(['message' => 'Could not create customer'], 500);
+    }
+}
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Customer $customer
      * @return \Illuminate\Http\Response
      */
+   
     public function destroy(Customer $customer)
-    {
+{
+    DB::beginTransaction();
+    try {
+        // Eliminar primero las direcciones asociadas
+        $customer->billingAddress()?->delete();
+        $customer->shippingAddress()?->delete();
+
+        // Luego el customer
         $customer->delete();
 
+        DB::commit();
         return response()->noContent();
+    } catch (\Exception $e) {
+        DB::rollBack();
+        Log::error("Error deleting customer: " . $e->getMessage());
+        return response()->json(['message' => 'Could not delete customer'], 500);
     }
+}
+
 
     public function countries()
     {
         return CountryResource::collection(Country::query()->orderBy('name', 'asc')->get());
     }
+
+
+
+
 }

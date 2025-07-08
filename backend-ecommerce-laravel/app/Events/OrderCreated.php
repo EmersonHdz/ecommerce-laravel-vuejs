@@ -25,4 +25,10 @@ class OrderCreated implements ShouldBroadcast
     {
         return new Channel('orders');
     }
+
+       
+    public function broadcastAs()
+    {
+        return 'order.created';
+    }  
 }

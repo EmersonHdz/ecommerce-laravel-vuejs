@@ -1,18 +1,17 @@
 <template>
   <div class="bg-white p-4 rounded-lg shadow animate-fade-in-down">
-    <div class="flex justify-between border-b-2 pb-3">
-      <div class="flex items-center">
-        <span class="whitespace-nowrap mr-3">Per Page</span>
+    <!-- Displaying options to control the number of items per page and search functionality -->
+    <div class="flex flex-col md:flex-row md:justify-between m-2">
+      <!-- Option to select the number of items per page and information about total customers -->
+      <div class="flex items-center mb-2 md:mb-0">
+        <span class="text-sm mr-5">Per Page</span>
         <select @change="getCustomers(null)" v-model="perPage"
                 class="appearance-none relative block w-24 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
+                 <option v-for="option in [5, 10, 20, 50, 100]" :value="option">{{ option }}</option>
         </select>
-        <span class="ml-3">Found {{customers.total}} customers</span>
+        <span class="text-sm ml-3">Found {{customers.total}} customers</span>
       </div>
+      <!-- Input field for searching customers -->
       <div>
         <input v-model="search" @change="getCustomers(null)"
                class="appearance-none relative block w-48 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
@@ -20,12 +19,14 @@
       </div>
     </div>
 
+
+  <div class="overflow-auto rounded-lg shadow-lg">
     <table class="table-auto w-full">
-      <thead>
+      <thead class="bg-gray-200 border-b-2 border-gray-300 text-center">
       <tr>
         <TableHeaderCell field="id" :sort-field="sortField" :sort-direction="sortDirection"
                          @click="sortCustomers('id')">
-          ID
+          No Id
         </TableHeaderCell>
         <TableHeaderCell field="name" :sort-field="sortField" :sort-direction="sortDirection"
                          @click="sortCustomers('name')">
@@ -52,9 +53,10 @@
         </TableHeaderCell>
       </tr>
       </thead>
+         <!-- show espiner while loading the products -->
       <tbody v-if="customers.loading || !customers.data.length">
       <tr>
-        <td colspan="7">
+        <td colspan="6">
           <Spinner v-if="customers.loading"/>
           <p v-else class="text-center py-8 text-gray-700">
             There are no customers
@@ -62,6 +64,7 @@
         </td>
       </tr>
       </tbody>
+      <!-- show users in row -->
       <tbody v-else>
       <tr v-for="(customer, index) of customers.data">
         <td class="border-b p-2 ">{{ customer.id }}</td>
@@ -78,72 +81,36 @@
           {{ customer.status }}
         </td>
         <td class="border-b p-2">
-          {{ customer.created_at }}
+          {{ formatDate(customer.created_at) }}
         </td>
-        <td class="border-b p-2 ">
-          <Menu as="div" class="relative inline-block text-left">
-            <div>
-              <MenuButton
-                class="inline-flex items-center justify-center w-full justify-center rounded-full w-10 h-10 bg-black bg-opacity-0 text-sm font-medium text-white hover:bg-opacity-5 focus:bg-opacity-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-              >
-                <DotsVerticalIcon
-                  class="h-5 w-5 text-indigo-500"
-                  aria-hidden="true"/>
-              </MenuButton>
-            </div>
+           <!-- Menu to actions-->
+             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <div class="flex items-center space-x-2">
+                <RouterLink
+                  :to="{name: 'app.customers.view', params: {id: customer.id}}"
+                  class="text-indigo-600 hover:text-indigo-900 p-1.5 rounded-md hover:bg-indigo-50"
+                  title="Edit"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                </RouterLink>
 
-            <transition
-              enter-active-class="transition duration-100 ease-out"
-              enter-from-class="transform scale-95 opacity-0"
-              enter-to-class="transform scale-100 opacity-100"
-              leave-active-class="transition duration-75 ease-in"
-              leave-from-class="transform scale-100 opacity-100"
-              leave-to-class="transform scale-95 opacity-0"
-            >
-              <MenuItems
-                class="absolute z-10 right-0 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-              >
-                <div class="px-1 py-1">
-                  <MenuItem v-slot="{ active }">
-                    <router-link
-                      :to="{name: 'app.customers.view', params: {id: customer.id}}"
-                      :class="[
-                        active ? 'bg-indigo-600 text-white' : 'text-gray-900',
-                        'group flex w-full items-center rounded-md px-2 py-2 text-sm',
-                      ]"
-                    >
-                      <PencilIcon
-                        :active="active"
-                        class="mr-2 h-5 w-5 text-indigo-400"
-                        aria-hidden="true"
-                      />
-                      Edit
-                    </router-link>
-                  </MenuItem>
-                  <MenuItem v-slot="{ active }">
-                    <button
-                      :class="[
-                        active ? 'bg-indigo-600 text-white' : 'text-gray-900',
-                        'group flex w-full items-center rounded-md px-2 py-2 text-sm',
-                      ]"
-                      @click="deleteCustomer(customer)"
-                    >
-                      <TrashIcon
-                        :active="active"
-                        class="mr-2 h-5 w-5 text-indigo-400"
-                        aria-hidden="true"
-                      />
-                      Delete
-                    </button>
-                  </MenuItem>
-                </div>
-              </MenuItems>
-            </transition>
-          </Menu>
-        </td>
+                <button
+                  @click="deleteCustomer(customer)"
+                  class="text-red-600 hover:text-red-900 p-1.5 rounded-md hover:bg-red-50"
+                  title="Delete"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+            </td>
       </tr>
       </tbody>
     </table>
+  </div>  
 
     <div v-if="!customers.loading" class="flex justify-between items-center mt-5">
       <div v-if="customers.data.length">
@@ -152,8 +119,7 @@
       <nav
         v-if="customers.total > customers.limit"
         class="relative z-0 inline-flex justify-center rounded-md shadow-sm -space-x-px"
-        aria-label="Pagination"
-      >
+        aria-label="Pagination">
         <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
         <a
           v-for="(link, i) of customers.links"
@@ -176,7 +142,7 @@
         </a>
       </nav>
     </div>
-  </div>
+ </div>
 </template>
 
 <script setup>
@@ -185,8 +151,8 @@ import store from "../../store";
 import Spinner from "../../components/core/Spinner.vue";
 import {CUSTOMERS_PER_PAGE} from "../../constants";
 import TableHeaderCell from "../../components/core/TableHeaderCell.vue";
-import {Menu, MenuButton, MenuItem, MenuItems} from "@headlessui/vue";
-import {DotsVerticalIcon, PencilIcon, TrashIcon} from '@heroicons/vue/outline'
+import Swal from "sweetalert2";
+
 
 const perPage = ref(CUSTOMERS_PER_PAGE);
 const search = ref('');
@@ -194,10 +160,10 @@ const customers = computed(() => store.state.customers);
 const sortField = ref('updated_at');
 const sortDirection = ref('desc')
 
-const customer = ref({})
-const showCustomerModal = ref(false);
-
-const emit = defineEmits(['clickEdit'])
+function formatDate(dateString) {
+  const options = { year: 'numeric', month: 'short', day: 'numeric' };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+}
 
 onMounted(() => {
   getCustomers();
@@ -237,19 +203,39 @@ function sortCustomers(field) {
   getCustomers()
 }
 
-function showAddNewModal() {
-  showCustomerModal.value = true
-}
+
 
 function deleteCustomer(customer) {
-  if (!confirm(`Are you sure you want to delete the customer?`)) {
-    return
-  }
-  store.dispatch('deleteCustomer', customer)
-    .then(res => {
-      store.commit('showToast', 'Customer has been successfully deleted');
-      store.dispatch('getCustomers')
-    })
+  Swal.fire({
+    title: 'Delete customer?',
+    text: `Are you sure you want to delete ${customer.name} ${customer.last_name}? This action cannot be undone.`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true
+  }).then((result) => {
+    if (result.isConfirmed) {
+        store.dispatch('deleteCustomer', customer)
+        .then(() => {
+          Swal.fire(
+            'Deleted!',
+            'The user has been deleted.',
+            'success'
+          );
+          getCustomers();
+        })
+        .catch(error => {
+          Swal.fire(
+            'Error!',
+            'There was an error deleting the user.',
+            'error'
+          );
+        });
+    }
+  });
 }
 
 </script>
@@ -257,3 +243,9 @@ function deleteCustomer(customer) {
 <style scoped>
 
 </style>
+
+
+
+
+
+

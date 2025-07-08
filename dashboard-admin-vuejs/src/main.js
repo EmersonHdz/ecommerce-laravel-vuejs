@@ -29,7 +29,7 @@ app.config.globalProperties.$filters = {
 
 window.Echo = new Echo({
   broadcaster: 'pusher',
-  key: '7e8f693ca5358a2b4b9c',
+  key: 'cc652d381cf2f6774164',
   cluster: 'eu',
   forceTLS: true
 });

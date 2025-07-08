@@ -160,8 +160,6 @@
   import Spinner from "../../components/core/Spinner.vue";
   import {PRODUCTS_PER_PAGE} from "../../constants";
   import TableHeaderCell from "../../components/core/TableHeaderCell.vue"
-  import {Menu, MenuButton, MenuItem, MenuItems} from "@headlessui/vue";
-  import {DotsVerticalIcon, PencilIcon, TrashIcon} from '@heroicons/vue/outline'
   import Swal from 'sweetalert2'
  
   

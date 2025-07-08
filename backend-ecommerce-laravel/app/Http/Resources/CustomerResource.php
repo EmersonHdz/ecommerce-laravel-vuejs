@@ -21,6 +21,13 @@ class CustomerResource extends JsonResource
     {
         $shipping = $this->shippingAddress;
         $billing = $this->billingAddress;
+
+         // Validación para asegurar que el usuario está cargado
+        if (!$this->user) {
+            // Opcional: lanzar una excepción para detectar errores temprano
+            throw new \Exception('Customer does not have an associated user');
+        }
+
         return [
             'id' => $this->user_id,
             'first_name' => $this->first_name,

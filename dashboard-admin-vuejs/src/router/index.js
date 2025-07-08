@@ -65,17 +65,7 @@ const routes = [
           name: 'app.users.create',
          component: () => import('../view/Users/UserForm.vue'),
         },
-           {
-        path: 'customers',
-        name: 'app.customers',
-          component: () => import('../view/Customers/Customers.vue'),
-      },
-      {
-        path: 'customers/:id',
-        name: 'app.customers.view',
-          component: () => import('../view/Customers/CustomerView.vue'),
-      },
-        
+            
         {
           path: 'users/:id',
           name: 'app.users.edit',
@@ -84,6 +74,26 @@ const routes = [
             id: (value) => /^\d+$/.test(value)
           }
         },
+
+
+           {
+        path: 'customers',
+        name: 'app.customers',
+          component: () => import('../view/Customers/Customers.vue'),
+      },
+       {
+          path: 'customers/create',
+          name: 'app.customers.create',
+         component: () => import('../view/Customers/CustomerView.vue'),
+        },
+      {
+        path: 'customers/:id',
+        name: 'app.customers.view',
+          component: () => import('../view/Customers/CustomerView.vue'),
+            props: {
+            id: (value) => /^\d+$/.test(value)
+          }
+      },
         
       ]
 
