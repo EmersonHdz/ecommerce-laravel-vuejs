@@ -45,6 +45,7 @@
               type="password"
               input-class="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-lg"
               :errors="errors.password"/>
+
             <CustomInput 
               v-model="customer.phone" 
               label="Phone" 

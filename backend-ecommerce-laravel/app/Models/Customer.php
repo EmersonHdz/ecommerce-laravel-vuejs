@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Customer extends Model
 {
     protected $primaryKey = 'user_id';
-
-    protected $fillable = ['first_name', 'last_name', 'phone', 'status',];
+    public $incrementing = false;
+    protected $fillable = [ 'user_id','first_name', 'last_name', 'phone', 'status',];
 
     public function user()
     {

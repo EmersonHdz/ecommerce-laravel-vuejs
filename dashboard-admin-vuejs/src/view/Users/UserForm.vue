@@ -20,6 +20,7 @@ const user = ref({
 })
 
 const errors = ref({});
+
 const loading = ref(false)
 const avatarPreview = ref(null)
 
@@ -94,6 +95,7 @@ async function onSubmit(close = false) {
       </div>
     </div>
 
+
     <!-- Form Container -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden animate-fade-in-down">
       <Spinner v-if="loading"
@@ -110,16 +112,17 @@ async function onSubmit(close = false) {
                 v-model="user.name"
                 label="First Name"
                 placeholder="Enter first name"
-                :error="errors['name']?.[0]"
+                :errors="errors.name || []" 
                 required
               />
+  
 
               <CustomInput
                 v-model="user.email"
                 type="email"
                 label="Email Address"
                 placeholder="Enter email address"
-                :error="errors['email']?.[0]"
+                :errors="errors.email"
                 required
               />
 
@@ -164,7 +167,7 @@ async function onSubmit(close = false) {
                 v-model="user.last_name"
                 label="Last Name"
                 placeholder="Enter last name"
-                :error="errors['last_name']?.[0]"
+                :errors="errors.last_name || []"
               />
 
               <CustomInput
@@ -172,7 +175,7 @@ async function onSubmit(close = false) {
                 type="tel"
                 label="Phone Number"
                 placeholder="Enter phone number"
-                :error="errors['phone']?.[0]"
+                :error="errors.phone?.[0]"
               />
 
               <CustomInput
@@ -180,9 +183,10 @@ async function onSubmit(close = false) {
                 type="password"
                 :label="user.id ? 'New Password (leave blank to keep current)' : 'Password'"
                 placeholder="Enter password"
-                :error="errors['password']?.[0]"
+                :errors="errors.password"
                 :required="!user.id"
               />
+              
             </div>
           </div>
         </div>

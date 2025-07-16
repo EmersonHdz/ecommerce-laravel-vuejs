@@ -46,6 +46,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            
         ]);
 
         event(new Registered($user));
@@ -55,6 +56,7 @@ class RegisteredUserController extends Controller
         $customer->user_id = $user->id;
         $customer->first_name = $names[0];
         $customer->last_name = $names[1] ?? '';
+        $customer->status = 'active'; 
         $customer->save();
 
         Auth::login($user);

@@ -281,25 +281,31 @@ export function getUser({commit}, id) {
  * @param {Object} user - user object containing all required fields.
  * @returns {Promise} - Axios POST request response.
  */
-export function createUser({ commit }, user) {
-  let formData = new FormData();
-  formData.append("name", user.name);
-  formData.append("last_name", user.last_name);
-  formData.append("email", user.email);
-  formData.append("password", user.password);
-  formData.append("phone", user.phone);
-  
+export async function createUser({ commit }, user) {
+  try {
+    const formData = new FormData();
+    formData.append("name", user.name);
+    formData.append("last_name", user.last_name);
+    formData.append("email", user.email);
+    formData.append("password", user.password);
+    formData.append("phone", user.phone);
 
-  if (user.avatar instanceof File) {
-    formData.append("avatar", user.avatar);
+    if (user.avatar instanceof File) {
+      formData.append("avatar", user.avatar);
+    }
+
+    const response = await axiosClient.post("/users", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return response;
+  } catch (err) {
+    throw err;
   }
-
-  return axiosClient.post("/users", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
 }
+
 
 
 

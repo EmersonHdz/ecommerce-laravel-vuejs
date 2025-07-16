@@ -69,7 +69,7 @@ const props = defineProps({
   prepend: { type: String, default: '' }, // Prepend slot
   append: { type: String, default: '' }, // Append slot
   selectOptions: Array, // Options for select dropdown
-  errors: { type: Array, required: false }, // Validation errors
+  errors: { type: [String, Array], required: false }, // Validation errors
   editorConfig: { type: Object, default: () => ({}) } // CKEditor configuration
 });
 

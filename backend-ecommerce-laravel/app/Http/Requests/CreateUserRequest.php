@@ -31,6 +31,7 @@ class CreateUserRequest extends FormRequest
             'password' => ['required', Password::min(8)->numbers()->letters()->symbols()],
             'phone' => ['required', 'max:20'],
             'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            
         ];
     }
 }

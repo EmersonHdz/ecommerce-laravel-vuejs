@@ -106,7 +106,7 @@ class AdminAuthController extends Controller
     private function canAuthenticateAsAdmin($user)
     {
         // Check if the user is an admin
-        return $user->is_admin;
+        return $user->role;
     }
 
     /**

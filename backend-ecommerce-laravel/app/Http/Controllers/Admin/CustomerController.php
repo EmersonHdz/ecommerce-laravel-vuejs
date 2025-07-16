@@ -25,27 +25,34 @@ class CustomerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $perPage = request('per_page', 10);
-        $search = request('search', '');
-        $sortField = request('sort_field', 'updated_at');
-        $sortDirection = request('sort_direction', 'desc');
+{
+    $perPage = request('per_page', 10);
+    $search = request('search', '');
+    $sortField = request('sort_field', 'updated_at');
+    $sortDirection = request('sort_direction', 'desc');
 
-        $query = Customer::query()
-            ->with('user')
-            ->orderBy("customers.$sortField", $sortDirection);
-        if ($search) {
-            $query
-                ->where(DB::raw("CONCAT(first_name, ' ', last_name)"), 'like', "%{$search}%")
-                ->join('users', 'customers.user_id', '=', 'users.id')
-                ->orWhere('users.email', 'like', "%{$search}%")
-                ->orWhere('customers.phone', 'like', "%{$search}%");
-        }
+    $query = Customer::query()
+        ->whereHas('user', function ($q) {
+            $q->where('role', 'customer'); // role 'customer'
+        })
+        ->with('user')
+        ->orderBy("customers.$sortField", $sortDirection);
 
-        $paginator = $query->paginate($perPage);
-
-        return CustomerListResource::collection($paginator);
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where(DB::raw("CONCAT(first_name, ' ', last_name)"), 'like', "%{$search}%")
+              ->orWhere('phone', 'like', "%{$search}%")
+              ->orWhereHas('user', function ($userQuery) use ($search) {
+                  $userQuery->where('email', 'like', "%{$search}%");
+              });
+        });
     }
+
+    $paginator = $query->paginate($perPage);
+
+    return CustomerListResource::collection($paginator);
+}
+
 
     /**
      * Display the specified resource.
@@ -119,14 +126,15 @@ class CustomerController extends Controller
     DB::beginTransaction();
 
     try {
-        // 1. Crear el User asociado primero
+        // create user first
         $user = User::create([
             'name' => $data['first_name'] . ' ' . $data['last_name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'phone' => $data['phone'] ?? null, 
         ]);
 
-        // 2. Crear el Customer
+        // 2. create customer
         $data['user_id'] = $user->id;
         $data['status'] = $data['status'] ? CustomerStatus::Active->value : CustomerStatus::Disabled->value;
         $data['created_by'] = auth()->id();
@@ -135,7 +143,7 @@ class CustomerController extends Controller
 
 
 
-        // 3. Crear direcciones
+        // 3. create addresses
         $data['billingAddress']['customer_id'] = $customer->user_id;
         $data['billingAddress']['type'] = AddressType::Billing->value;
 
